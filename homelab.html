@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Homelab | Hebert Labs</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="homelab-page">
+    <main class="page">
+      <header class="topbar">
+        <div class="brand">Hebert Labs / Homelab</div>
+        <div class="topbar-actions">
+          <nav class="nav" aria-label="Primary">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="pharmacy-tools.html">Pharmacy Tools</a>
+            <a href="github-projects.html">GitHub Projects</a>
+            <a href="homelab.html">Homelab</a>
+          </nav>
+          <details class="menu">
+            <summary class="menu-toggle">
+              <span class="menu-icon" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+              <span>Pages</span>
+            </summary>
+            <div class="menu-panel">
+              <a href="index.html">Home</a>
+              <a href="about.html">About</a>
+              <a href="pharmacy-tools.html">Pharmacy Tools</a>
+              <a href="github-projects.html">GitHub Projects</a>
+              <a href="homelab.html">Homelab</a>
+            </div>
+          </details>
+        </div>
+      </header>
+
+      <section class="hero homelab-hero">
+        <div class="panel hero-copy">
+          <div class="eyebrow">Homelab</div>
+          <h1>A Debian-based homelab focused on media, storage, and practical self-hosted infrastructure.</h1>
+          <p class="lead">
+            This lab runs on a Debian server and centers around a Servarr stack
+            with Gluetun, local NAS storage, and Plex. It is where I practice the
+            kind of systems work I actually enjoy: Linux administration, service
+            reliability, routing, storage management, and keeping real workloads online.
+          </p>
+          <p class="meta-line">
+            Public traffic for this site is handled separately through a VPS,
+            Cloudflare, and Nginx, while the homelab focuses on internal
+            services, media, and infrastructure practice.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="index.html">Back to landing</a>
+            <a class="button secondary" href="about.html">Go to about</a>
+          </div>
+        </div>
+
+        <aside class="panel hero-card topology-card" aria-label="Homelab topology">
+          <div class="window-bar" aria-hidden="true">
+            <span class="window-dot"></span>
+            <span class="window-dot"></span>
+            <span class="window-dot"></span>
+          </div>
+          <div class="topology-stack">
+            <div class="topology-node external-node">
+              <span class="topology-label">Public Edge</span>
+              <strong>Cloudflare -> VPS -> Nginx</strong>
+              <p>Public traffic stays on a separate edge path instead of terminating inside the lab.</p>
+            </div>
+            <div class="topology-connector" aria-hidden="true"></div>
+            <div class="topology-node primary-node">
+              <span class="topology-label">Core Lab</span>
+              <strong>Debian Server</strong>
+              <p>The main machine carries the media stack, storage responsibilities, and the hands-on ops work.</p>
+            </div>
+            <div class="topology-grid">
+              <div class="mini-node">
+                <span>Media</span>
+                <strong>Plex</strong>
+              </div>
+              <div class="mini-node">
+                <span>Routing</span>
+                <strong>Gluetun</strong>
+              </div>
+              <div class="mini-node">
+                <span>Automation</span>
+                <strong>Servarr</strong>
+              </div>
+              <div class="mini-node">
+                <span>Storage</span>
+                <strong>NAS</strong>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="grid homelab-grid">
+        <section class="panel about">
+          <div class="eyebrow">Overview</div>
+          <h2>What this homelab is doing</h2>
+          <p class="section-copy">
+            This homelab is built around one main Debian server that handles media
+            and storage responsibilities while also serving as a practical place
+            to build Linux, container, and networking experience. It is less
+            about theoretical infrastructure and more about running useful
+            services that have to stay available and organized.
+          </p>
+          <div class="chip-list" aria-label="Homelab tags">
+            <span class="chip">Debian 13</span>
+            <span class="chip">Servarr</span>
+            <span class="chip">Gluetun</span>
+            <span class="chip">Plex</span>
+            <span class="chip">NAS</span>
+            <span class="chip">Nginx</span>
+            <span class="chip">Cloudflare</span>
+            <span class="chip">VPS</span>
+          </div>
+        </section>
+
+        <section class="panel focus">
+          <div class="eyebrow">Core Roles</div>
+          <h2>What the lab is actually responsible for</h2>
+          <div class="role-stack">
+            <div class="role-card">
+              <span class="role-kicker">Platform</span>
+              <strong>Debian base</strong>
+              <p>A stable Linux foundation for running useful services and practicing real administration work.</p>
+            </div>
+            <div class="role-card">
+              <span class="role-kicker">Media</span>
+              <strong>Plex + Servarr</strong>
+              <p>A lived-in stack that has to stay organized and usable instead of a purely decorative lab deployment.</p>
+            </div>
+            <div class="role-card">
+              <span class="role-kicker">Networking</span>
+              <strong>Gluetun + routing</strong>
+              <p>Service paths, container networking, and traffic separation that force clearer infrastructure decisions.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel links">
+          <div class="eyebrow">Traffic Shape</div>
+          <h2>How the architecture is split</h2>
+          <div class="architecture-list">
+            <div class="architecture-row">
+              <span class="arch-step">01</span>
+              <div>
+                <strong>Public site path</strong>
+                <p>The website lives on a VPS behind Cloudflare and Nginx, so the public edge stays separate from the internal lab.</p>
+              </div>
+            </div>
+            <div class="architecture-row">
+              <span class="arch-step">02</span>
+              <div>
+                <strong>Internal service path</strong>
+                <p>The homelab handles the media stack and storage side of the setup, keeping the self-hosted workloads local and practical.</p>
+              </div>
+            </div>
+            <div class="architecture-row">
+              <span class="arch-step">03</span>
+              <div>
+                <strong>Operational boundary</strong>
+                <p>That split makes the overall system easier to reason about while still giving the lab a real job to do.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel contact">
+          <div class="eyebrow">Why It Matters</div>
+          <h2>What this setup helps me practice</h2>
+          <div class="practice-grid">
+            <div class="practice-card">
+              <span class="practice-kicker">Linux</span>
+              <strong>Real system ownership</strong>
+              <p>Running a Debian machine that matters builds better instincts than endlessly disposable test environments.</p>
+            </div>
+            <div class="practice-card">
+              <span class="practice-kicker">Containers</span>
+              <strong>Long-lived services</strong>
+              <p>Useful services change how I think about maintenance, breakage, and recovery over time.</p>
+            </div>
+            <div class="practice-card">
+              <span class="practice-kicker">Networking</span>
+              <strong>Clear boundaries</strong>
+              <p>Separating the public site edge from the lab keeps the architecture cleaner and more intentional.</p>
+            </div>
+            <div class="practice-card">
+              <span class="practice-kicker">Operations</span>
+              <strong>Reliability mindset</strong>
+              <p>The lab keeps pushing me toward cleaner configs, better habits, and systems that stay understandable.</p>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>

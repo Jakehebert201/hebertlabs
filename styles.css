@@ -176,6 +176,14 @@ a {
   margin-bottom: 2rem;
 }
 
+.landing-hero {
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+}
+
+.homelab-hero {
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+}
+
 .panel {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -278,6 +286,13 @@ h2 {
   position: relative;
 }
 
+.topology-card {
+  background:
+    radial-gradient(circle at top right, rgba(117, 255, 145, 0.11), transparent 32%),
+    linear-gradient(180deg, rgba(106, 244, 255, 0.04), rgba(106, 244, 255, 0)),
+    rgba(8, 18, 36, 0.86);
+}
+
 .window-bar {
   display: flex;
   gap: 0.45rem;
@@ -344,11 +359,86 @@ h2 {
   color: var(--text);
 }
 
+.topology-stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.topology-node,
+.mini-node,
+.role-card,
+.practice-card {
+  border: 1px solid rgba(106, 244, 255, 0.16);
+  border-radius: 20px;
+  background: rgba(106, 244, 255, 0.05);
+}
+
+.topology-node {
+  padding: 1rem 1.1rem;
+}
+
+.topology-node strong,
+.mini-node strong,
+.role-card strong,
+.practice-card strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 1.05rem;
+}
+
+.topology-node p,
+.role-card p,
+.practice-card p {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.topology-label,
+.role-kicker,
+.practice-kicker {
+  display: inline-block;
+  margin-bottom: 0.55rem;
+  color: var(--accent-warm);
+  font-family: "IBM Plex Mono", "Courier New", monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.topology-connector {
+  width: 2px;
+  height: 32px;
+  margin: -0.2rem auto -0.2rem;
+  background: linear-gradient(var(--accent), rgba(106, 244, 255, 0));
+}
+
+.topology-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.mini-node {
+  padding: 0.95rem;
+}
+
+.mini-node span {
+  display: inline-block;
+  margin-bottom: 0.45rem;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 1.5rem;
   margin-top: 1.5rem;
+}
+
+.homelab-grid {
+  align-items: stretch;
 }
 
 .about,
@@ -401,6 +491,117 @@ h2 {
   font-size: 0.92rem;
 }
 
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.4rem;
+}
+
+.portal-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  min-height: 220px;
+  padding: 1.25rem;
+  border: 1px solid rgba(106, 244, 255, 0.16);
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(106, 244, 255, 0.04), rgba(106, 244, 255, 0)),
+    rgba(7, 17, 35, 0.62);
+  text-decoration: none;
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.portal-card:hover,
+.portal-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(106, 244, 255, 0.34);
+  background:
+    linear-gradient(180deg, rgba(106, 244, 255, 0.09), rgba(106, 244, 255, 0)),
+    rgba(7, 17, 35, 0.76);
+}
+
+.portal-kicker {
+  color: var(--accent-warm);
+  font-family: "IBM Plex Mono", "Courier New", monospace;
+  font-size: 0.76rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.portal-title {
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
+
+.portal-copy {
+  color: var(--muted);
+  line-height: 1.65;
+  flex: 1;
+}
+
+.portal-cta {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.role-stack,
+.practice-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.1rem;
+}
+
+.role-card,
+.practice-card {
+  padding: 1rem 1.1rem;
+}
+
+.architecture-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.architecture-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  align-items: start;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.architecture-row strong {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.architecture-row p {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.68;
+}
+
+.arch-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(106, 244, 255, 0.2);
+  background: rgba(106, 244, 255, 0.08);
+  color: var(--accent);
+  font-family: "IBM Plex Mono", "Courier New", monospace;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
 .link-list a {
   display: flex;
   justify-content: space-between;
@@ -422,6 +623,30 @@ h2 {
 
 .link-list span:last-child {
   max-width: 34ch;
+  text-align: right;
+  line-height: 1.55;
+}
+
+.static-list {
+  width: 100%;
+}
+
+.static-list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.static-list span:first-child {
+  font-weight: 700;
+}
+
+.static-list span:last-child {
+  max-width: 34ch;
+  color: var(--muted);
   text-align: right;
   line-height: 1.55;
 }
@@ -463,12 +688,30 @@ h2 {
     grid-template-columns: 1fr;
   }
 
+  .landing-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .homelab-hero {
+    grid-template-columns: 1fr;
+  }
+
   .about,
   .links,
   .focus,
   .contact {
     grid-column: span 12;
   }
+
+  .portal-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topology-grid,
+  .practice-grid {
+    grid-template-columns: 1fr;
+  }
+
 }
 
 @media (max-width: 640px) {
@@ -520,6 +763,19 @@ h2 {
   }
 
   .link-list span:last-child {
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .architecture-row {
+    grid-template-columns: 1fr;
+  }
+
+  .static-list div {
+    flex-direction: column;
+  }
+
+  .static-list span:last-child {
     max-width: 100%;
     text-align: left;
   }

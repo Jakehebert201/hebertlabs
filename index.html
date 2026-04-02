@@ -3,19 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jacob Hebert | Systems, DevOps, and IT</title>
+    <title>Hebert Labs | Systems, DevOps, and IT</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body class="landing-page">
     <main class="page">
       <header class="topbar">
-        <div class="brand">Jacob Hebert / Systems + DevOps</div>
+        <div class="brand">Hebert Labs / Jacob Hebert</div>
         <div class="topbar-actions">
           <nav class="nav" aria-label="Primary">
-            <a href="#about">About</a>
-            <a href="#focus">Focus</a>
-            <a href="#links">Links</a>
-            <a href="#contact">Contact</a>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="pharmacy-tools.html">Pharmacy Tools</a>
+            <a href="github-projects.html">GitHub Projects</a>
+            <a href="homelab.html">Homelab</a>
+            <a href="#explore">Explore</a>
           </nav>
           <details class="menu">
             <summary class="menu-toggle">
@@ -27,133 +29,168 @@
               <span>Pages</span>
             </summary>
             <div class="menu-panel">
-              <a href="#">Projects</a>
-              <a href="#">Homelab</a>
-              <a href="#">Notes</a>
+              <a href="index.html">Home</a>
+              <a href="about.html">About</a>
+              <a href="pharmacy-tools.html">Pharmacy Tools</a>
+              <a href="github-projects.html">GitHub Projects</a>
+              <a href="homelab.html">Homelab</a>
               <a href="#">Resume</a>
             </div>
           </details>
         </div>
       </header>
 
-      <section class="hero">
+      <section class="hero landing-hero">
         <div class="panel hero-copy">
-          <div class="eyebrow">Senior CS Student / May 2026 Graduate</div>
-          <h1>I build dependable Linux systems, automate the boring parts, and like being the person who figures out why something broke.</h1>
+          <div class="eyebrow">Landing Page</div>
+          <h1>Building a home for systems work, homelab documentation, and the things I am shipping next.</h1>
           <p class="lead">
-            I'm Jacob Hebert, a Computer Science student at East Tennessee State University
-            moving toward DevOps, infrastructure, and IT operations work. My background is in
-            software and systems, but the work I enjoy most lives closer to the environment itself:
-            Linux administration, containers, networking, troubleshooting, and making services more reliable.
+            This is the front door for everything I am building under Hebert Labs:
+            infrastructure experiments, portfolio pages, tooling ideas, and the
+            systems-focused work I am growing into.
           </p>
           <p class="meta-line">
-            Interests: Linux, Docker, Nginx, scripting, observability, self-hosting, networking,
-            system hardening, CI/CD, and practical automation.
+            The goal is simple: make it easy to find the work, the project pages
+            behind it, and the about page that explains who I am and where I am headed.
           </p>
           <div class="hero-actions">
-            <a class="button primary" href="#links">View my tooling</a>
-            <a class="button secondary" href="#contact">Get in touch</a>
+            <a class="button primary" href="about.html">Read the about page</a>
+            <a class="button secondary" href="#explore">Explore sections</a>
           </div>
         </div>
 
-        <aside class="panel hero-card" aria-label="Profile snapshot">
+        <aside class="panel hero-card" aria-label="Site snapshot">
           <div>
             <div class="window-bar" aria-hidden="true">
               <span class="window-dot"></span>
               <span class="window-dot"></span>
               <span class="window-dot"></span>
             </div>
-            <pre class="code-snippet"><code>stack:
-  os:
-    - EndeavourOS / Arch Linux
-  containers:
-    - Docker Compose
-  services:
-    - Nginx
-    - Plex / ARR stack
-    - PostgreSQL
-  focus:
-    status: building reliable systems</code></pre>
+            <pre class="code-snippet"><code>site:
+  status: active
+  mode: expanding
+  sections:
+    - about
+    - pharmacy_tools
+    - github_projects
+    - homelab
+  goal:
+    status: publish useful work</code></pre>
           </div>
           <div>
-            <h2>Ops Snapshot</h2>
+            <h2>What This Site Is For</h2>
             <ul class="snapshot-list">
-              <li><strong>Primary focus:</strong> Linux systems, automation, containers, and operational reliability</li>
-              <li><strong>Hands-on work:</strong> Homelab services, reverse proxies, VPN-routed containers, and troubleshooting real system issues</li>
-              <li><strong>Direction:</strong> Junior DevOps, systems, platform, SRE-adjacent, or infrastructure support roles</li>
+              <li><strong>Profile:</strong> A real about page for background, goals, and direction</li>
+              <li><strong>Projects:</strong> Dedicated pages for GitHub work and future tools I am building</li>
+              <li><strong>Homelab:</strong> A place to document the setup, services, and architecture behind my lab</li>
             </ul>
             <p class="card-note">
-              I tend to care less about shipping flashy app features and more about making the underlying system clean, stable, and maintainable.
+              The landing page is intentionally structured around reusable cards,
+              so adding more destinations later is just duplicating a single block.
             </p>
           </div>
         </aside>
       </section>
 
       <section class="grid">
-        <article class="panel about" id="about">
-          <div class="eyebrow">About</div>
-          <h2>Who I am on the infrastructure side</h2>
+        <section class="panel about" id="explore">
+          <div class="eyebrow">Explore</div>
+          <h2>Start here, then branch outward</h2>
           <p class="section-copy">
-            I come from a computer science background, but over time I found myself gravitating toward the parts of engineering that deal with systems instead of just application logic. I like understanding how machines are configured, how services talk to each other, how deployments stay reproducible, and how to debug failures when things stop behaving the way they should.
+            Each card below is a reusable entry point. Keep the structure, change
+            the text and destination, and the landing page scales cleanly as you
+            add more sections.
           </p>
-          <p class="section-copy">
-            Most of my practical experience has come from building and maintaining projects on Linux, running containerized services, working with reverse proxies and cloud-hosted apps, and getting comfortable with the kind of troubleshooting that only happens once something is live. I am especially interested in roles where I can contribute to infrastructure, internal tooling, platform reliability, and operational support.
-          </p>
-        </article>
+          <div class="portal-grid">
+            <a class="portal-card" href="about.html">
+              <span class="portal-kicker">Featured Page</span>
+              <strong class="portal-title">About</strong>
+              <span class="portal-copy">Background, current focus, and the systems path I am building toward.</span>
+              <span class="portal-cta">Open page</span>
+            </a>
+            <a class="portal-card" href="pharmacy-tools.html">
+              <span class="portal-kicker">New Page</span>
+              <strong class="portal-title">Pharmacy Tools</strong>
+              <span class="portal-copy">A dedicated section for pharmacy-related utilities, workflows, and software ideas you want to build later.</span>
+              <span class="portal-cta">Open page</span>
+            </a>
+            <a class="portal-card" href="github-projects.html">
+              <span class="portal-kicker">New Page</span>
+              <strong class="portal-title">GitHub Projects</strong>
+              <span class="portal-copy">A showcase page for specific repositories, experiments, and the work you want visitors to notice first.</span>
+              <span class="portal-cta">Open page</span>
+            </a>
+            <a class="portal-card" href="homelab.html">
+              <span class="portal-kicker">New Page</span>
+              <strong class="portal-title">Homelab</strong>
+              <span class="portal-copy">A place to paste in your current setup, services, diagrams, networking, and lessons from running the lab.</span>
+              <span class="portal-cta">Open page</span>
+            </a>
+          </div>
+        </section>
 
-        <section class="panel focus" id="focus">
-          <div class="eyebrow">Current Focus</div>
-          <h2>What I am working on right now</h2>
+        <section class="panel focus">
+          <div class="eyebrow">How To Scale It</div>
+          <h2>One card pattern, many destinations</h2>
           <ul class="list">
-            <li class="focus-item">Building a stronger foundation in DevOps and systems work while finishing my CS degree</li>
-            <li class="focus-item">Running self-hosted services with Docker Compose, reverse proxying with Nginx, and improving reliability through cleaner configs and better operational habits</li>
-            <li class="focus-item">Sharpening Linux troubleshooting, networking, backup, logging, and security skills through hands-on lab work instead of just theory</li>
+            <li class="focus-item">Duplicate a single <code>portal-card</code> block to add another page link</li>
+            <li class="focus-item">Point the card to a new HTML file when you are ready to publish that section</li>
+            <li class="focus-item">Keep the landing page focused on navigation, while the deeper pages hold the actual detail</li>
           </ul>
         </section>
 
-        <section class="panel links" id="links">
-          <div class="eyebrow">Tooling + Links</div>
-          <h2>Platforms, tools, and future pages</h2>
+        <section class="panel links" id="stack">
+          <div class="eyebrow">Current Stack</div>
+          <h2>What the site is orbiting around</h2>
           <div class="chip-list" aria-label="Technology stack">
             <span class="chip">Linux</span>
-            <span class="chip">Arch / EndeavourOS</span>
-            <span class="chip">Bash</span>
-            <span class="chip">Python</span>
             <span class="chip">Docker</span>
             <span class="chip">Nginx</span>
-            <span class="chip">PostgreSQL</span>
+            <span class="chip">Python</span>
             <span class="chip">Cloudflare</span>
+            <span class="chip">PostgreSQL</span>
             <span class="chip">Networking</span>
-            <span class="chip">Security</span>
+            <span class="chip">Observability</span>
           </div>
           <div class="link-list">
+            <a href="about.html">
+              <span>About Page</span>
+              <span>The main profile page with background, focus, and current direction</span>
+            </a>
+            <a href="pharmacy-tools.html">
+              <span>Pharmacy Tools</span>
+              <span>A dedicated page for software ideas and workflow tools in a pharmacy context</span>
+            </a>
+            <a href="github-projects.html">
+              <span>GitHub Projects</span>
+              <span>A cleaner way to feature specific repositories instead of pointing only to the profile</span>
+            </a>
+            <a href="homelab.html">
+              <span>Homelab</span>
+              <span>A structured page for documenting machines, services, routing, storage, and operational details</span>
+            </a>
             <a href="https://github.com/Jakehebert201">
               <span>GitHub</span>
-              <span>Code, experiments, class projects, and infrastructure-related work</span>
-            </a>
-            <a href="https://hebertlabs.com">
-              <span>Website</span>
-              <span>My home base for projects, writeups, and whatever I decide to build next</span>
-            </a>
-            <a href="#">
-              <span>Homelab / Notes</span>
-              <span>Future space for debugging writeups, diagrams, and lessons learned</span>
+              <span>Repositories, experiments, coursework, and infrastructure-adjacent work</span>
             </a>
           </div>
         </section>
 
-        <section class="panel contact" id="contact">
-          <div class="eyebrow">Contact</div>
-          <h2>Open to systems, infrastructure, and IT opportunities</h2>
+        <section class="panel contact">
+          <div class="eyebrow">Next Step</div>
+          <h2>Build pages as the work grows</h2>
           <p>
-            I'm currently preparing for roles centered on Linux systems, DevOps, infrastructure support, and adjacent operational work. This page can point people to my projects, lab work, and resume while I keep building experience in the areas I want to grow into.
+            The landing page should stay lightweight and navigational. The detail
+            now lives in the individual pages you add next: pharmacy tools,
+            GitHub projects, homelab documentation, resume, and whatever else
+            becomes worth publishing.
           </p>
-          <a class="button" href="https://hebertlabs.com">Visit hebertlabs.com</a>
+          <a class="button" href="about.html">Go to about</a>
         </section>
       </section>
 
       <footer class="footer">
-        <p>Built around the kind of work I actually enjoy: reliable systems, practical tooling, and figuring out how things behave in the real world.</p>
+        <p>Hebert Labs is the landing point. The deeper pages are where the actual work and writeups will live.</p>
       </footer>
     </main>
   </body>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitHub Projects | Hebert Labs</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div class="brand">Hebert Labs / GitHub Projects</div>
+        <div class="topbar-actions">
+          <nav class="nav" aria-label="Primary">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="pharmacy-tools.html">Pharmacy Tools</a>
+            <a href="github-projects.html">GitHub Projects</a>
+            <a href="homelab.html">Homelab</a>
+          </nav>
+          <details class="menu">
+            <summary class="menu-toggle">
+              <span class="menu-icon" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+              <span>Pages</span>
+            </summary>
+            <div class="menu-panel">
+              <a href="index.html">Home</a>
+              <a href="about.html">About</a>
+              <a href="pharmacy-tools.html">Pharmacy Tools</a>
+              <a href="github-projects.html">GitHub Projects</a>
+              <a href="homelab.html">Homelab</a>
+            </div>
+          </details>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="panel hero-copy">
+          <div class="eyebrow">Project Showcase</div>
+          <h1>A page for the repositories and builds worth highlighting.</h1>
+          <p class="lead">
+            This page should do more than link to your GitHub profile. Use it to
+            feature specific projects, explain what you built, and show why each
+            one matters.
+          </p>
+          <p class="meta-line">
+            Good project pages explain the problem, the stack, your role, and
+            what you learned or improved while building it.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="https://github.com/Jakehebert201">Open GitHub profile</a>
+            <a class="button secondary" href="index.html">Back to landing</a>
+          </div>
+        </div>
+
+        <aside class="panel hero-card" aria-label="GitHub projects snapshot">
+          <div>
+            <div class="window-bar" aria-hidden="true">
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+            </div>
+            <pre class="code-snippet"><code>github_projects:
+  status: ready
+  source:
+    - github.com/Jakehebert201
+  goal:
+    status: highlight best work
+  format:
+    - repo
+    - summary
+    - stack
+    - impact</code></pre>
+          </div>
+          <div>
+            <h2>Showcase Pattern</h2>
+            <ul class="snapshot-list">
+              <li><strong>Project name:</strong> The repo or product title</li>
+              <li><strong>What it does:</strong> A short explanation in plain English</li>
+              <li><strong>Why it matters:</strong> The technical or practical reason it is worth featuring</li>
+            </ul>
+          </div>
+        </aside>
+      </section>
+
+      <section class="grid">
+        <section class="panel about">
+          <div class="eyebrow">Featured Repos</div>
+          <h2>Project cards you can replace with real repositories</h2>
+          <div class="portal-grid">
+            <a class="portal-card" href="#">
+              <span class="portal-kicker">Repo Slot</span>
+              <strong class="portal-title">Project One</strong>
+              <span class="portal-copy">Replace this with a repo you want to feature, along with a short explanation of the problem it solves.</span>
+              <span class="portal-cta">Add repository link</span>
+            </a>
+            <a class="portal-card" href="#">
+              <span class="portal-kicker">Repo Slot</span>
+              <strong class="portal-title">Project Two</strong>
+              <span class="portal-copy">Use this slot for a systems, automation, class, or tooling project worth highlighting.</span>
+              <span class="portal-cta">Add repository link</span>
+            </a>
+            <a class="portal-card" href="#">
+              <span class="portal-kicker">Repo Slot</span>
+              <strong class="portal-title">Project Three</strong>
+              <span class="portal-copy">This can become a more polished case-study card once you know which repos you want front and center.</span>
+              <span class="portal-cta">Add repository link</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="panel focus">
+          <div class="eyebrow">What To Include</div>
+          <h2>Make each project easy to scan</h2>
+          <ul class="list">
+            <li class="focus-item">Name the project and describe it in one sentence</li>
+            <li class="focus-item">Call out the stack, your role, and the hardest part</li>
+            <li class="focus-item">Link to the repo, a demo, or screenshots where relevant</li>
+          </ul>
+        </section>
+      </section>
+    </main>
+  </body>
+</html>
