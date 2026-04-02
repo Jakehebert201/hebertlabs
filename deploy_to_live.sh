@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO_DIR="/home/jake/.openclaw/workspace/hebertlabs"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$SCRIPT_DIR"
 LIVE_DIR="/var/www/hebertlabs"
 BRANCH="main"
 
