@@ -670,6 +670,207 @@ h2 {
   font-size: 0.95rem;
 }
 
+.tool-host {
+  grid-column: span 12;
+  padding: 2rem;
+}
+
+.tools-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  gap: 1.25rem;
+  margin-top: 1.4rem;
+  align-items: start;
+}
+
+.tool-menu {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.tool-menu-button {
+  width: 100%;
+  padding: 1rem 1.05rem;
+  border: 1px solid rgba(106, 244, 255, 0.16);
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(106, 244, 255, 0.04), rgba(106, 244, 255, 0)),
+    rgba(7, 17, 35, 0.62);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.tool-menu-button:hover,
+.tool-menu-button:focus-visible,
+.tool-menu-button[aria-selected="true"] {
+  transform: translateY(-2px);
+  border-color: rgba(106, 244, 255, 0.34);
+  background:
+    linear-gradient(180deg, rgba(106, 244, 255, 0.09), rgba(106, 244, 255, 0)),
+    rgba(7, 17, 35, 0.78);
+}
+
+.tool-menu-button strong,
+.tool-menu-button span {
+  display: block;
+}
+
+.tool-menu-button span {
+  margin-top: 0.45rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.tool-workspace {
+  min-width: 0;
+}
+
+.tool-panel {
+  border: 1px solid rgba(106, 244, 255, 0.16);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(106, 244, 255, 0.05), rgba(106, 244, 255, 0)),
+    rgba(7, 17, 35, 0.72);
+  padding: 1.5rem;
+}
+
+.tool-panel[hidden] {
+  display: none;
+}
+
+.tool-copy,
+.tool-placeholder {
+  color: var(--muted);
+  line-height: 1.72;
+}
+
+.tool-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.field-group {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.field-group span {
+  font-weight: 700;
+}
+
+.field-group input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid rgba(106, 244, 255, 0.18);
+  border-radius: 14px;
+  background: rgba(3, 11, 24, 0.86);
+  color: var(--text);
+  font: inherit;
+}
+
+.field-group input:focus-visible {
+  outline: 2px solid rgba(106, 244, 255, 0.32);
+  outline-offset: 2px;
+}
+
+.tool-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.tool-actions .button {
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.tool-actions .button.secondary {
+  border-color: var(--line);
+}
+
+.tool-output {
+  margin-top: 1.25rem;
+}
+
+.tool-output[hidden] {
+  display: none;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid rgba(106, 244, 255, 0.2);
+  background: rgba(106, 244, 255, 0.08);
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.status-pill.status-today {
+  border-color: rgba(255, 179, 71, 0.3);
+  background: rgba(255, 179, 71, 0.12);
+  color: var(--accent-warm);
+}
+
+.status-pill.status-overdue {
+  border-color: rgba(255, 120, 120, 0.28);
+  background: rgba(255, 120, 120, 0.12);
+  color: #ff9a9a;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-top: 1rem;
+}
+
+.result-card {
+  padding: 1rem;
+  border: 1px solid rgba(106, 244, 255, 0.16);
+  border-radius: 18px;
+  background: rgba(106, 244, 255, 0.05);
+}
+
+.result-label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.result-value {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.tool-list {
+  margin: 1rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.tool-list li + li {
+  margin-top: 0.55rem;
+}
+
 @media (max-width: 900px) {
   .topbar {
     align-items: flex-start;
@@ -712,6 +913,11 @@ h2 {
     grid-template-columns: 1fr;
   }
 
+  .tools-layout,
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+
 }
 
 @media (max-width: 640px) {
@@ -750,7 +956,8 @@ h2 {
   .about,
   .links,
   .focus,
-  .contact {
+  .contact,
+  .tool-host {
     padding: 1.35rem;
   }
 
@@ -778,5 +985,9 @@ h2 {
   .static-list span:last-child {
     max-width: 100%;
     text-align: left;
+  }
+
+  .tool-form {
+    grid-template-columns: 1fr;
   }
 }

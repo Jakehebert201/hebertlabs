@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pharmacy Tool Lab | Hebert Labs</title>
+    <meta
+      name="description"
+      content="Use the Hebert Labs pharmacy tool lab to access working pharmacy utilities, starting with a basic days supply calculator."
+    />
+    <meta name="author" content="Jacob Hebert" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#050816" />
+    <link rel="canonical" href="https://hebertlabs.com/pharmacy-tool-lab.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Hebert Labs" />
+    <meta property="og:title" content="Pharmacy Tool Lab | Hebert Labs" />
+    <meta
+      property="og:description"
+      content="Open the working pharmacy tool lab at Hebert Labs. The first build is a simple days supply calculator."
+    />
+    <meta property="og:url" content="https://hebertlabs.com/pharmacy-tool-lab.html" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Pharmacy Tool Lab | Hebert Labs" />
+    <meta
+      name="twitter:description"
+      content="Use the Hebert Labs pharmacy tool lab to access working pharmacy utilities, starting with a basic days supply calculator."
+    />
+    <link rel="stylesheet" href="styles.css?v=20260402a" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Pharmacy Tool Lab",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "Web",
+        "url": "https://hebertlabs.com/pharmacy-tool-lab.html",
+        "description": "A small collection of pharmacy workflow tools and calculators, starting with a days supply calculator.",
+        "author": {
+          "@type": "Person",
+          "name": "Jacob Hebert"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div class="brand">Hebert Labs / Pharmacy Tool Lab</div>
+        <div class="topbar-actions">
+          <nav class="nav" aria-label="Primary">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="pharmacy-tools.html">Pharmacy Tools</a>
+            <a href="github-projects.html">GitHub Projects</a>
+            <a href="homelab.html">Homelab</a>
+          </nav>
+          <details class="menu">
+            <summary class="menu-toggle">
+              <span class="menu-icon" aria-hidden="true">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+              <span>Pages</span>
+            </summary>
+            <div class="menu-panel">
+              <a href="index.html">Home</a>
+              <a href="about.html">About</a>
+              <a href="pharmacy-tools.html">Pharmacy Tools</a>
+              <a href="github-projects.html">GitHub Projects</a>
+              <a href="homelab.html">Homelab</a>
+            </div>
+          </details>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="panel hero-copy">
+          <div class="eyebrow">Working Tool Page</div>
+          <h1>Build and run the actual pharmacy tools here.</h1>
+          <p class="lead">
+            This is the page that hosts the working pharmacy programs. The launcher
+            page stays project-oriented, while this page holds the actual JavaScript tools.
+          </p>
+          <p class="meta-line">
+            Starter build: a basic days supply calculator that takes the fill date
+            and intended days supply, then shows when the prescription is due next.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="pharmacy-tools.html">Back to pharmacy tools</a>
+            <a class="button secondary" href="#tool-lab">Open tool menu</a>
+          </div>
+        </div>
+
+        <aside class="panel hero-card" aria-label="Tool lab snapshot">
+          <div>
+            <div class="window-bar" aria-hidden="true">
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+              <span class="window-dot"></span>
+            </div>
+            <pre class="code-snippet"><code>tool_lab:
+  status: live
+  current_tools:
+    - days_supply_calculator
+  next_builds:
+    - wcb_audit_helper
+    - workflow_generator</code></pre>
+          </div>
+          <div>
+            <h2>How It Is Set Up</h2>
+            <ul class="snapshot-list">
+              <li><strong>Menu-driven:</strong> Click a tool and only that tool's inputs appear.</li>
+              <li><strong>Simple stack:</strong> Plain HTML, CSS, and JavaScript for fast iteration.</li>
+              <li><strong>Expandable:</strong> New calculators can be dropped into the same menu layout later.</li>
+            </ul>
+          </div>
+        </aside>
+      </section>
+
+      <section class="grid">
+        <section class="panel tool-host" id="tool-lab">
+          <div class="eyebrow">Tool Menu</div>
+          <h2>Choose a pharmacy tool</h2>
+          <p class="section-copy">
+            The menu is rendered on the page so you can keep adding calculators and
+            small workflow helpers without changing the overall layout.
+          </p>
+
+          <div class="tools-layout">
+            <div class="tool-menu" role="tablist" aria-label="Pharmacy tools">
+              <button
+                class="tool-menu-button"
+                type="button"
+                role="tab"
+                aria-selected="true"
+                aria-controls="tool-days-supply"
+                data-tool-button="days-supply"
+              >
+                <strong>Days Supply Calculator</strong>
+                <span>Enter a fill date and intended days supply, then calculate the next due date.</span>
+              </button>
+
+              <button
+                class="tool-menu-button"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="tool-wcb-helper"
+                data-tool-button="wcb-helper"
+              >
+                <strong>WCB Audit Helper</strong>
+                <span>Placeholder panel for the refill audit workflow tools you mentioned.</span>
+              </button>
+
+              <button
+                class="tool-menu-button"
+                type="button"
+                role="tab"
+                aria-selected="false"
+                aria-controls="tool-workflow-generator"
+                data-tool-button="workflow-generator"
+              >
+                <strong>Workflow Generator</strong>
+                <span>Placeholder panel for daily staffing and workflow generation tools.</span>
+              </button>
+            </div>
+
+            <div class="tool-workspace">
+              <section class="tool-panel" id="tool-days-supply" role="tabpanel" data-tool-panel="days-supply">
+                <h3>Days Supply Calculator</h3>
+                <p class="tool-copy">
+                  This basic calculator uses the fill date plus the intended days supply
+                  to estimate when the prescription is due next.
+                </p>
+
+                <form id="days-supply-form" class="tool-form">
+                  <label class="field-group">
+                    <span>Fill date</span>
+                    <input id="fill-date" name="fill-date" type="date" required />
+                  </label>
+
+                  <label class="field-group">
+                    <span>Intended days supply</span>
+                    <input
+                      id="days-supply"
+                      name="days-supply"
+                      type="number"
+                      min="1"
+                      step="1"
+                      inputmode="numeric"
+                      placeholder="30"
+                      required
+                    />
+                  </label>
+
+                  <div class="tool-actions">
+                    <button class="button primary" type="submit">Calculate next due date</button>
+                    <button class="button secondary" type="reset">Clear</button>
+                  </div>
+                </form>
+
+                <div class="tool-output" id="days-supply-output" hidden aria-live="polite">
+                  <div class="status-pill" id="days-supply-status">Ready</div>
+                  <div class="result-grid">
+                    <div class="result-card">
+                      <span class="result-label">Filled On</span>
+                      <span class="result-value" id="result-fill-date"></span>
+                    </div>
+                    <div class="result-card">
+                      <span class="result-label">Supply Covers Through</span>
+                      <span class="result-value" id="result-covered-through"></span>
+                    </div>
+                    <div class="result-card">
+                      <span class="result-label">Due Next On</span>
+                      <span class="result-value" id="result-due-date"></span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section
+                class="tool-panel"
+                id="tool-wcb-helper"
+                role="tabpanel"
+                data-tool-panel="wcb-helper"
+                hidden
+              >
+                <h3>WCB Audit Helper</h3>
+                <p class="tool-placeholder">
+                  This slot is ready for the refill request audit tool. When you are ready,
+                  we can add the specific fields, output format, and copy-ready workflow text here.
+                </p>
+              </section>
+
+              <section
+                class="tool-panel"
+                id="tool-workflow-generator"
+                role="tabpanel"
+                data-tool-panel="workflow-generator"
+                hidden
+              >
+                <h3>Workflow Generator</h3>
+                <p class="tool-placeholder">
+                  This slot is ready for a staffing or workflow generator. The menu and panel
+                  structure are already in place, so the next tool is mostly form and logic work.
+                </p>
+              </section>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel focus">
+          <div class="eyebrow">Starter Rules</div>
+          <h2>How the first calculator behaves</h2>
+          <ul class="tool-list">
+            <li>The next due date is calculated as fill date plus intended days supply.</li>
+            <li>The page also shows the last date that current supply covers for quick reference.</li>
+            <li>Everything runs client-side in JavaScript, so this is easy to inspect and expand later.</li>
+          </ul>
+        </section>
+
+        <section class="panel links">
+          <div class="eyebrow">Next Additions</div>
+          <h2>Easy follow-on builds</h2>
+          <div class="static-list">
+            <div>
+              <span>Refill timing checker</span>
+              <span>Use fill history plus expected supply to flag early or late refill behavior.</span>
+            </div>
+            <div>
+              <span>Daily staffing board</span>
+              <span>Generate a simple view of who is present and what the day's assignments should be.</span>
+            </div>
+            <div>
+              <span>Audit note generator</span>
+              <span>Turn form inputs into a consistent text block for manual pharmacy workflows.</span>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="pharmacy-tools.js"></script>
+  </body>
+</html>
