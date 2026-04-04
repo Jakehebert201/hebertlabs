@@ -27,7 +27,7 @@
       name="twitter:description"
       content="Browse featured GitHub repositories, automation work, technical projects, and systems builds by Jacob Hebert."
     />
-    <link rel="stylesheet" href="styles.css?v=20260401a" />
+    <link rel="stylesheet" href="styles.css?v=20260402a" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -79,13 +79,13 @@
           <div class="eyebrow">Project Showcase</div>
           <h1>A page for the repositories and builds worth highlighting.</h1>
           <p class="lead">
-            This page should do more than link to your GitHub profile. Use it to
-            feature specific projects, explain what you built, and show why each
-            one matters.
+            This page highlights specific repositories instead of acting like a generic
+            profile link dump. Each featured card gives a fast overview of what the
+            project does, the stack behind it, and why it is worth opening.
           </p>
           <p class="meta-line">
-            Good project pages explain the problem, the stack, your role, and
-            what you learned or improved while building it.
+            Current focus: a TypeScript incremental game experiment and a team-built
+            student location tracker from a scrum-based software engineering project.
           </p>
           <div class="hero-actions">
             <a class="button primary" href="https://github.com/Jakehebert201">Open GitHub profile</a>
@@ -101,11 +101,14 @@
               <span class="window-dot"></span>
             </div>
             <pre class="code-snippet"><code>github_projects:
-  status: ready
+  status: active
   source:
     - github.com/Jakehebert201
+  featured_repos:
+    - Entropic-Threads
+    - CSCI4250-ScrumProject
   goal:
-    status: highlight best work
+    status: highlight real builds
   format:
     - repo
     - summary
@@ -115,9 +118,9 @@
           <div>
             <h2>Showcase Pattern</h2>
             <ul class="snapshot-list">
-              <li><strong>Project name:</strong> The repo or product title</li>
-              <li><strong>What it does:</strong> A short explanation in plain English</li>
-              <li><strong>Why it matters:</strong> The technical or practical reason it is worth featuring</li>
+              <li><strong>Project name:</strong> Clear repo title with a direct GitHub link</li>
+              <li><strong>What it does:</strong> A one-paragraph explanation of the build and stack</li>
+              <li><strong>Why it matters:</strong> A quick reason it is worth featuring on the site</li>
             </ul>
           </div>
         </aside>
@@ -126,36 +129,36 @@
       <section class="grid">
         <section class="panel about">
           <div class="eyebrow">Featured Repos</div>
-          <h2>Project cards you can replace with real repositories</h2>
+          <h2>Selected repositories from your GitHub</h2>
           <div class="portal-grid">
-            <a class="portal-card" href="#">
-              <span class="portal-kicker">Repo Slot</span>
-              <strong class="portal-title">Project One</strong>
-              <span class="portal-copy">Replace this with a repo you want to feature, along with a short explanation of the problem it solves.</span>
-              <span class="portal-cta">Add repository link</span>
+            <a class="portal-card" href="https://github.com/Jakehebert201/Entropic-Threads">
+              <span class="portal-kicker">TypeScript | Vite | Game Logic</span>
+              <strong class="portal-title">Entropic Threads</strong>
+              <span class="portal-copy">A TypeScript incremental game built with Vite and `break_eternity.js`. The core idea is a braiding mechanic that boosts alternating chains of generators, alongside offline gains, dynamic UI updates, and save/load progression.</span>
+              <span class="portal-cta">Open repository</span>
             </a>
-            <a class="portal-card" href="#">
-              <span class="portal-kicker">Repo Slot</span>
-              <strong class="portal-title">Project Two</strong>
-              <span class="portal-copy">Use this slot for a systems, automation, class, or tooling project worth highlighting.</span>
-              <span class="portal-cta">Add repository link</span>
+            <a class="portal-card" href="https://github.com/Jakehebert201/CSCI4250-ScrumProject">
+              <span class="portal-kicker">Flask | Scrum Project | Team Build</span>
+              <strong class="portal-title">CSCI4250 Scrum Project</strong>
+              <span class="portal-copy">A student location tracker built as a software engineering scrum project. The Flask app lets staff view student check-ins on a map, track attendance time, and manage classes, with Python, HTML, JavaScript, and CSS across the stack.</span>
+              <span class="portal-cta">Open repository</span>
             </a>
-            <a class="portal-card" href="#">
-              <span class="portal-kicker">Repo Slot</span>
-              <strong class="portal-title">Project Three</strong>
-              <span class="portal-copy">This can become a more polished case-study card once you know which repos you want front and center.</span>
-              <span class="portal-cta">Add repository link</span>
+            <a class="portal-card" href="https://github.com/Jakehebert201">
+              <span class="portal-kicker">Next Slot</span>
+              <strong class="portal-title">Future Featured Repo</strong>
+              <span class="portal-copy">Leave one card open for the next project you want to elevate here, whether that is infrastructure work, automation, classwork, or a more polished case study.</span>
+              <span class="portal-cta">Browse profile</span>
             </a>
           </div>
         </section>
 
         <section class="panel focus">
-          <div class="eyebrow">What To Include</div>
-          <h2>Make each project easy to scan</h2>
+          <div class="eyebrow">Page Template</div>
+          <h2>Keep the GitHub page consistent as you add more work</h2>
           <ul class="list">
-            <li class="focus-item">Name the project and describe it in one sentence</li>
-            <li class="focus-item">Call out the stack, your role, and the hardest part</li>
-            <li class="focus-item">Link to the repo, a demo, or screenshots where relevant</li>
+            <li class="focus-item">Lead with projects that show different strengths instead of featuring similar repos back to back</li>
+            <li class="focus-item">Keep each summary concrete: what it is, what stack it uses, and what makes it technically interesting</li>
+            <li class="focus-item">As better projects ship, replace the future slot rather than changing the overall card layout</li>
           </ul>
         </section>
       </section>
