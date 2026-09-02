@@ -8,6 +8,13 @@ set -euo pipefail
 #   ./deploy_to_live.sh
 #   SKIP_GIT=1 ./deploy_to_live.sh          # rebuild and publish without pulling
 #   LIVE_DIR=/var/www/example ./deploy_to_live.sh
+#   USE_SUDO=1 ./deploy_to_live.sh          # publish when LIVE_DIR is not writable
+#   sudo ./deploy_to_live.sh                # same as USE_SUDO=1 for the publish step
+#   NGINX_USER=www-data sudo -E ./deploy_to_live.sh   # chown after publish (implies USE_SUDO)
+#
+# Staging (cp fallback) uses $TMPDIR, /tmp, or .deploy-stage/ in the repo — never
+# under /var/www/. Publishing to LIVE_DIR may require sudo if your user cannot
+# write /var/www/hebertlabs (common when the docroot is owned by www-data).
 #
 # See deploy/nginx-hebertlabs.conf.example for the expected Nginx server block.
 
@@ -20,6 +27,12 @@ BRANCH="${BRANCH:-main}"
 # Set to www-data (Debian/Ubuntu) or nginx (RHEL) to chown after publish. Requires root.
 NGINX_USER="${NGINX_USER:-}"
 SKIP_GIT="${SKIP_GIT:-0}"
+USE_SUDO="${USE_SUDO:-0}"
+
+# chown requires root; treat NGINX_USER as an explicit request to elevate publish.
+if [ -n "$NGINX_USER" ]; then
+  USE_SUDO=1
+fi
 
 cd "$REPO_DIR"
 
@@ -57,33 +70,108 @@ if [ -z "$(ls -A "$BUILD_DIR")" ]; then
   exit 1
 fi
 
+live_parent() {
+  dirname "$LIVE_DIR"
+}
+
+maybe_sudo() {
+  if [ "$USE_SUDO" = "1" ]; then
+    sudo "$@"
+  else
+    "$@"
+  fi
+}
+
+can_write_live_parent() {
+  local parent
+  parent="$(live_parent)"
+  [ -d "$parent" ] && [ -w "$parent" ]
+}
+
+can_write_live_dir() {
+  if [ -d "$LIVE_DIR" ] && [ -w "$LIVE_DIR" ]; then
+    return 0
+  fi
+  can_write_live_parent
+}
+
+require_publish_access() {
+  local mode="${1:-stage_swap}"
+
+  if [ "$USE_SUDO" = "1" ]; then
+    return 0
+  fi
+
+  if [ "$mode" = "rsync" ]; then
+    if can_write_live_dir; then
+      return 0
+    fi
+  elif can_write_live_parent; then
+    return 0
+  fi
+
+  echo "[deploy] ERROR: no write access to publish into $LIVE_DIR." >&2
+  echo "[deploy] Your user cannot write $(live_parent) (or $LIVE_DIR is not writable)." >&2
+  echo "[deploy] Run: sudo ./deploy_to_live.sh   or   USE_SUDO=1 ./deploy_to_live.sh" >&2
+  echo "[deploy] Alternatively, grant write access (e.g. chown/chmod or add user to www-data)." >&2
+  exit 1
+}
+
+writable_temp_base() {
+  if [ -n "${TMPDIR:-}" ] && [ -d "$TMPDIR" ] && [ -w "$TMPDIR" ]; then
+    printf '%s' "${TMPDIR%/}"
+    return 0
+  fi
+  if [ -d /tmp ] && [ -w /tmp ]; then
+    printf '%s' /tmp
+    return 0
+  fi
+  local repo_stage="$REPO_DIR/.deploy-stage"
+  mkdir -p "$repo_stage"
+  printf '%s' "$repo_stage"
+}
+
+make_stage_dir() {
+  local prefix="${1:-hebertlabs-deploy}"
+  mktemp -d "$(writable_temp_base)/${prefix}.XXXXXX"
+}
+
 fix_permissions() {
   local target="$1"
   echo "[deploy] Setting permissions on $target ..."
-  find "$target" -type d -exec chmod 755 {} +
-  find "$target" -type f -exec chmod 644 {} +
-  if [ -n "$NGINX_USER" ]; then
-    chown -R "$NGINX_USER:$NGINX_USER" "$target"
+  if [ "$USE_SUDO" = "1" ]; then
+    sudo find "$target" -type d -exec chmod 755 {} +
+    sudo find "$target" -type f -exec chmod 644 {} +
+    if [ -n "$NGINX_USER" ]; then
+      sudo chown -R "$NGINX_USER:$NGINX_USER" "$target"
+    fi
+  else
+    find "$target" -type d -exec chmod 755 {} +
+    find "$target" -type f -exec chmod 644 {} +
+    if [ -n "$NGINX_USER" ]; then
+      chown -R "$NGINX_USER:$NGINX_USER" "$target"
+    fi
   fi
 }
 
 publish_with_rsync() {
-  mkdir -p "$LIVE_DIR"
-  # .well-known is the ACME webroot, not build output. Letting --delete near it
-  # silently breaks Let's Encrypt renewal.
-  rsync -av --delete --exclude='.well-known' "$BUILD_DIR/" "$LIVE_DIR/"
+  require_publish_access rsync
+  maybe_sudo mkdir -p "$LIVE_DIR"
+  maybe_sudo rsync -av --delete --exclude='.well-known' "$BUILD_DIR/" "$LIVE_DIR/"
 }
 
 publish_with_stage_swap() {
   local stage_dir previous_dir
-  stage_dir="$(mktemp -d "${LIVE_DIR}.stage.XXXXXX")"
-  previous_dir="${LIVE_DIR}.previous.$$"
+  stage_dir="$(make_stage_dir hebertlabs-deploy)"
+  previous_dir="$(make_stage_dir hebertlabs-previous)"
+
+  require_publish_access stage_swap
 
   restore() {
     if [ -d "$previous_dir" ] && [ ! -e "$LIVE_DIR" ]; then
-      mv "$previous_dir" "$LIVE_DIR"
+      maybe_sudo mv "$previous_dir" "$LIVE_DIR"
     fi
-    rm -rf "$stage_dir"
+    rm -rf "$stage_dir" "$previous_dir"
   }
   trap restore EXIT
 
@@ -96,11 +184,11 @@ publish_with_stage_swap() {
     cp -a "$LIVE_DIR/.well-known" "$stage_dir/"
   fi
 
-  mkdir -p "$(dirname "$LIVE_DIR")"
+  maybe_sudo mkdir -p "$(live_parent)"
   if [ -d "$LIVE_DIR" ]; then
-    mv "$LIVE_DIR" "$previous_dir"
+    maybe_sudo mv "$LIVE_DIR" "$previous_dir"
   fi
-  mv "$stage_dir" "$LIVE_DIR"
+  maybe_sudo mv "$stage_dir" "$LIVE_DIR"
 
   trap - EXIT
   rm -rf "$previous_dir"
@@ -111,6 +199,7 @@ if command -v rsync >/dev/null 2>&1; then
   publish_with_rsync
 else
   echo "[deploy] rsync not found; using stage-and-swap cp fallback"
+  echo "[deploy] Hint: install rsync for faster deploys (Debian/Ubuntu: sudo apt install rsync)"
   publish_with_stage_swap
 fi
 

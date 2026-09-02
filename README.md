@@ -95,7 +95,7 @@ files only — no Node process stays running after deploy.
 - Node.js **20 or newer** (`node --version`)
 - Git clone of this repo on the server
 - Nginx serving `/var/www/hebertlabs` (see `deploy/nginx-hebertlabs.conf.example`)
-- Write access to the document root (often via `sudo`)
+- Write access to the document root, or `sudo` for the publish step (see below)
 
 First-time setup (once per server):
 
@@ -120,8 +120,16 @@ Environment overrides:
 ```bash
 SKIP_GIT=1 ./deploy_to_live.sh              # rebuild without git pull
 LIVE_DIR=/var/www/hebertlabs ./deploy_to_live.sh
-NGINX_USER=www-data sudo -E ./deploy_to_live.sh   # chown after publish
+USE_SUDO=1 ./deploy_to_live.sh              # publish when /var/www is not writable
+sudo ./deploy_to_live.sh                    # same as USE_SUDO=1 for the publish step
+NGINX_USER=www-data sudo -E ./deploy_to_live.sh   # chown after publish (implies USE_SUDO)
 ```
+
+The build always runs as your user. Staging uses `$TMPDIR`, `/tmp`, or
+`.deploy-stage/` in the repo — not under `/var/www/`. Copying into
+`/var/www/hebertlabs` may require `sudo ./deploy_to_live.sh` or
+`USE_SUDO=1 ./deploy_to_live.sh` if your user is not in the `www-data` group
+with write access to the document root.
 
 Post-deploy check:
 

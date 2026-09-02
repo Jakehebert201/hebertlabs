@@ -1,6 +1,7 @@
 .codex
 node_modules/
 dist/
+.deploy-stage/
 .astro/
 .env
 .env.production
