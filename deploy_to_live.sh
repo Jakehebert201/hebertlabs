@@ -160,8 +160,26 @@ publish_with_rsync() {
   maybe_sudo rsync -av --delete --exclude='.well-known' "$BUILD_DIR/" "$LIVE_DIR/"
 }
 
+publish_inplace_cp() {
+  # When LIVE_DIR is writable but /var/www is not, we cannot rename directories
+  # for a swap — update files in place instead (same outcome for a static site).
+  require_publish_access rsync
+
+  maybe_sudo mkdir -p "$LIVE_DIR"
+
+  echo "[deploy] Updating $LIVE_DIR in place (no write access to $(live_parent)) ..."
+  find "$LIVE_DIR" -mindepth 1 -maxdepth 1 ! -name '.well-known' -exec rm -rf {} +
+  cp -a "$BUILD_DIR/." "$LIVE_DIR/"
+}
+
 publish_with_stage_swap() {
   local stage_dir previous_dir
+
+  if can_write_live_dir && ! can_write_live_parent; then
+    publish_inplace_cp
+    return
+  fi
+
   stage_dir="$(make_stage_dir hebertlabs-deploy)"
   previous_dir="$(make_stage_dir hebertlabs-previous)"
 
