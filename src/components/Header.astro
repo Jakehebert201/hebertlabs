@@ -1,0 +1,37 @@
+---
+import { withTrailingSlash } from '../utils/url.js';
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/calculators/', label: 'Calculators' },
+  { href: '/notes/', label: 'Notes' },
+  { href: '/about/', label: 'About' },
+];
+
+// Compared in directory form so /about and /about/ are treated as the same page.
+const path = withTrailingSlash(Astro.url.pathname);
+
+// "page" is reserved for the page actually being viewed; a section that merely
+// contains it gets "true", so /calculators/proportions/ does not claim to be
+// the Calculators index.
+function currentState(href) {
+  if (path === href) return 'page';
+  if (href === '/') return undefined;
+  return path.startsWith(href) ? 'true' : undefined;
+}
+---
+
+<header class="masthead">
+  <div class="shell masthead__inner">
+    <a class="wordmark" href="/">Hebert<span>Labs</span></a>
+    <nav class="sitenav" aria-label="Main">
+      {
+        links.map((link) => (
+          <a href={link.href} aria-current={currentState(link.href)}>
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,129 @@
+---
+import CalcPage from '../../components/CalcPage.astro';
+import Field from '../../components/Field.astro';
+---
+
+<CalcPage
+  title="Ratio & proportion"
+  kicker="Foundations"
+  lede="The method most people meet first. It works, and you need to be able to read it because textbooks and lecturers use it — but it hides its mistakes, which is why the rest of this site leans on dimensional analysis instead."
+  description="Solve a proportion by cross-multiplication, and see the same problem worked as a dimensional analysis chain."
+>
+  <form slot="form" id="calc">
+    <fieldset>
+      <legend>Label your units (optional, but it makes the setup readable)</legend>
+      <div class="field-grid">
+        <Field label="Left-hand unit" name="unitA" type="text" placeholder="mg" />
+        <Field label="Right-hand unit" name="unitB" type="text" placeholder="mL" />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>The relationship you know</legend>
+      <div class="field-grid">
+        <Field label="Amount" name="a" placeholder="250" />
+        <Field label="corresponds to" name="b" placeholder="5" />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>The relationship you want</legend>
+      <div class="field-grid">
+        <Field label="Amount" name="c" placeholder="400" />
+        <Field label="corresponds to" name="d" placeholder="leave blank" />
+      </div>
+    </fieldset>
+
+    <p class="hint" style="margin-top:-0.6rem">
+      Leave exactly one of the four amounts empty. That empty box is what gets
+      solved.
+    </p>
+
+    <div class="field-actions">
+      <button class="btn btn--primary" type="submit">Solve</button>
+      <button class="btn btn--quiet" type="reset">Clear</button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"unitA":"mg","unitB":"mL","a":"250","b":"5","c":"400","d":""}'
+      >
+        Example: stock solution
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"unitA":"tablets","unitB":"mg","a":"3","b":"1500","c":"5","d":""}'
+      >
+        Example: tablets
+      </button>
+    </div>
+  </form>
+
+  <div slot="concept">
+    <h2>What a proportion says</h2>
+    <p>
+      A ratio compares two quantities: <strong>250 mg per 5 mL</strong>. A
+      proportion says two ratios describe the same relationship, so they stay
+      equal as the numbers scale up or down.
+    </p>
+
+    <pre class="formula">  a       c
+ ───  =  ───
+  b       d</pre>
+
+    <p>
+      Because the fractions are equal, multiplying diagonally across the equals
+      sign gives matching products. That is cross-multiplication:
+    </p>
+
+    <pre class="formula">a × d  =  b × c</pre>
+
+    <p>Divide by whatever is attached to the unknown and you have your answer.</p>
+
+    <h3>Where it goes wrong</h3>
+    <p>
+      Everything depends on the units sitting in matching positions. If
+      milligrams are on top on the left, they must be on top on the right. Flip
+      one side and the algebra still works perfectly — you will get a clean
+      number, confidently wrong, with nothing in the working to warn you.
+    </p>
+
+    <p>
+      That is the real problem with this method. It is not that it's difficult.
+      It's that a setup error and a correct setup look identical once you start
+      multiplying.
+    </p>
+
+    <h3>Why dimensional analysis is safer</h3>
+    <p>
+      <a href="/calculators/dimensional-analysis/">Dimensional analysis</a>
+      solves the same problems by multiplying by conversion factors and letting
+      units cancel. The advantage is that a wrong setup announces itself: the
+      units come out as something impossible, and you catch the mistake before
+      you ever reach an answer.
+    </p>
+
+    <p>
+      Every worked solution here ends by showing the same problem both ways, so
+      you can read it in whichever language you need.
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>Sanity check regardless of method.</strong> If you asked for
+        more drug, you should get more volume. If the answer moved the wrong
+        direction, the setup was upside down.
+      </p>
+    </div>
+  </div>
+</CalcPage>
+
+<script>
+  import { setupCalculator } from '../../scripts/calc.js';
+  import { solveProportions } from '../../scripts/solvers/proportions.js';
+
+  setupCalculator({
+    form: '#calc',
+    solve: solveProportions,
+  });
+</script>

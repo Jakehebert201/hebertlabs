@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { calculators } from '../data/calculators.js';
+import { formatDate, toDate } from '../utils/date.js';
+import { withTrailingSlash } from '../utils/url.js';
+
+const noteModules = Object.values(import.meta.glob('./notes/*.md', { eager: true }));
+
+const notes = noteModules
+  .filter((note) => !note.frontmatter?.draft)
+  .sort((a, b) => {
+    const dateA = toDate(a.frontmatter?.date)?.getTime() ?? 0;
+    const dateB = toDate(b.frontmatter?.date)?.getTime() ?? 0;
+    return dateB - dateA;
+  })
+  .slice(0, 3);
+---
+
+<BaseLayout description="Pharmacy calculation tools that show their work, plus study notes.">
+  <section class="page-intro" style="margin-bottom:3.5rem">
+    <p class="kicker">Hebert Labs</p>
+    <h1>Pharmacy calculations, worked all the way through.</h1>
+    <p class="lede">
+      I'm a pharmacy student, and most of the calculation tools I could find
+      just hand you a number. That is fine when you already understand the
+      problem and useless when you don't. So I'm building the other kind: tools
+      that set the problem up in front of you, substitute your numbers, and show
+      every step to the answer.
+    </p>
+    <div class="field-actions" style="margin-top:1.5rem">
+      <a class="btn btn--primary" href="/calculators/">Open the calculators</a>
+      <a class="btn btn--quiet" href="/notes/">Read the notes</a>
+    </div>
+  </section>
+
+  <section style="margin-bottom:3.5rem">
+    <h2>The calculators</h2>
+    <p class="lede" style="max-width:68ch;margin-bottom:1.5rem">
+      Aimed at the fundamentals, the ones that everything later leans on.
+    </p>
+    <ul class="card-grid">
+      {
+        calculators.map((calc) => (
+          <li>
+            <a class="card" href={calc.href}>
+              <span class="card__tag">{calc.tag}</span>
+              <h3 class="card__title">{calc.title}</h3>
+              <p class="card__desc">{calc.desc}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  {
+    notes.length > 0 && (
+      <section>
+        <h2>Latest notes</h2>
+        <ul class="note-list">
+          {notes.map((note) => (
+            <li>
+              <a class="note-link" href={withTrailingSlash(note.url)}>
+                <span class="note-link__meta">
+                  {formatDate(note.frontmatter.date)}
+                  {note.frontmatter.topic ? ` · ${note.frontmatter.topic}` : ''}
+                </span>
+                <h3 class="note-link__title">{note.frontmatter.title}</h3>
+                <p class="note-link__desc">{note.frontmatter.description}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</BaseLayout>

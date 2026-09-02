@@ -1,0 +1,32 @@
+---
+const {
+  label,
+  name,
+  id = name,
+  type = 'number',
+  step = 'any',
+  min,
+  max,
+  value,
+  placeholder,
+  hint,
+  wide = false,
+} = Astro.props;
+---
+
+<div class:list={['field', wide && 'field--wide']}>
+  <label for={id}>{label}</label>
+  <input
+    id={id}
+    name={name}
+    type={type}
+    step={type === 'number' ? step : undefined}
+    min={min}
+    max={max}
+    value={value}
+    placeholder={placeholder}
+    inputmode={type === 'number' ? 'decimal' : undefined}
+    autocomplete="off"
+  />
+  {hint ? <span class="hint">{hint}</span> : null}
+</div>

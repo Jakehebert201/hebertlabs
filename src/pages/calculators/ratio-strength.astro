@@ -1,0 +1,173 @@
+---
+import CalcPage from '../../components/CalcPage.astro';
+import Field from '../../components/Field.astro';
+---
+
+<CalcPage
+  title="Ratio strength, ppm & ppb"
+  kicker="Concentration"
+  lede="Parts per million sounds abstract until you notice it is just mg/L. Parts per billion is just mcg/L. Enter a concentration in whatever form the question gave it to you, and this converts it by canceling units."
+  description="Convert between ppm, ppb, mg/L, mcg/L, percentage strength and ratio strength using dimensional analysis."
+>
+  <form slot="form" id="calc">
+    <div class="field-grid">
+      <div class="field field--wide">
+        <label for="basis">Basis</label>
+        <select id="basis" name="basis">
+          <option value="w/v">w/v — solid dissolved in a liquid</option>
+          <option value="w/w">w/w — solid mixed into a solid</option>
+          <option value="v/v">v/v — liquid mixed into a liquid</option>
+        </select>
+      </div>
+    </div>
+
+    <fieldset>
+      <legend>What the question gave you</legend>
+      <div class="field-grid">
+        <div class="field">
+          <label for="known">Form</label>
+          <select id="known" name="known">
+            <option value="ratio">Ratio strength, as 1 : X</option>
+            <option value="percent">Percentage strength (%)</option>
+            <option value="ppm">Parts per million (ppm)</option>
+            <option value="ppb">Parts per billion (ppb)</option>
+            <option value="conc">Concentration (mg/mL, mg/g)</option>
+          </select>
+        </div>
+        <Field
+          label="Value"
+          name="value"
+          placeholder="10000"
+          hint="For a ratio strength of 1:10,000 enter just the 10000."
+        />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>How you want the answer</legend>
+      <div class="field-grid">
+        <div class="field field--wide">
+          <label for="report">Report the concentration as</label>
+          <select id="report" name="report">
+            <option value="ppm">Parts per million — mg/L</option>
+            <option value="ppb">Parts per billion — mcg/L</option>
+          </select>
+          <span class="hint">
+            Both are always shown in the table. This just picks which one gets
+            the headline and the worked solution.
+          </span>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Optional — how much are you actually making?</legend>
+      <div class="field-grid">
+        <Field
+          label="Total quantity of preparation"
+          name="quantity"
+          placeholder="500"
+          hint="In mL for w/v and v/v, or in g for w/w. Fill this in to also get the amount you need to weigh out."
+          wide
+        />
+      </div>
+    </fieldset>
+
+    <div class="field-actions">
+      <button class="btn btn--primary" type="submit">Convert</button>
+      <button class="btn btn--quiet" type="reset">Clear</button>
+    </div>
+
+    <div class="field-actions" style="margin-top:0.9rem">
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"basis":"w/v","known":"ratio","value":"10000","report":"ppm","quantity":"500"}'
+      >
+        Example: 1:10,000 epinephrine
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"basis":"w/v","known":"percent","value":"0.9","report":"ppm","quantity":"1000"}'
+      >
+        Example: 0.9% saline
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"basis":"w/v","known":"ppm","value":"4","report":"ppm","quantity":""}'
+      >
+        Example: 4 ppm fluoride
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"basis":"w/v","known":"ppb","value":"50","report":"ppb","quantity":""}'
+      >
+        Example: 50 ppb contaminant
+      </button>
+    </div>
+  </form>
+
+  <div slot="concept">
+    <h2>ppm is mg/L. That's the whole trick.</h2>
+    <p>
+      "One part per million" is hard to picture. But work out what it means for
+      a liter of water and it becomes something you can hold in your head:
+    </p>
+
+    <pre class="formula">1 ppm  =  1 mg/L  =  1 mcg/mL
+1 ppb  =  1 mcg/L  =  1 ng/mL</pre>
+
+    <p>
+      A liter of water weighs 1000 g, which is a million milligrams. So one
+      milligram in that liter is literally one part in a million. The
+      abstraction and the practical measurement are the same number, and once
+      you see that you can stop converting and just read it off.
+    </p>
+
+    <p>
+      For solids the same logic gives <strong>1 ppm = 1 mg/kg</strong>, since a
+      kilogram is also a million milligrams.
+    </p>
+
+    <h3>Getting there by canceling units</h3>
+    <p>
+      Every conversion on this page is done the same way: start with one liter
+      (or one kilogram) of the preparation, multiply by factors that turn it
+      into the unit you want, and let the units cancel. For a 1:10,000 w/v
+      solution:
+    </p>
+
+    <pre class="formula">      1000 mL     1 g       1000 mg
+1 L × ─────── × ───────── × ───────  =  100 mg
+       1 L      10 000 mL     1 g</pre>
+
+    <p>
+      Liters cancel, milliliters cancel, grams cancel, and milligrams are all
+      that survive. 100 mg in 1 L is 100 mg/L, which is 100 ppm. No formula to
+      remember and nothing to set up upside down.
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>The one assumption.</strong> ppm = mg/L holds because the
+        solution is mostly water, and water is 1 g/mL. For dilute aqueous
+        preparations that is close enough to exact. For a syrup or a
+        concentrated solution with a specific gravity well away from 1, the
+        equivalence drifts and you would work from mass rather than volume.
+      </p>
+    </div>
+  </div>
+</CalcPage>
+
+<script>
+  import { setupCalculator } from '../../scripts/calc.js';
+  import { solveRatioStrength } from '../../scripts/solvers/ratio-strength.js';
+
+  setupCalculator({
+    form: '#calc',
+    solve: solveRatioStrength,
+  });
+</script>

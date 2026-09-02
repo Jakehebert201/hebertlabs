@@ -1,0 +1,250 @@
+---
+import CalcPage from '../../components/CalcPage.astro';
+import Field from '../../components/Field.astro';
+---
+
+<CalcPage
+  title="Colligative properties & Van't Hoff"
+  kicker="Physical pharmacy"
+  lede="Osmolarity, freezing point, boiling point and vapor pressure all move for the same reason: the sheer number of particles floating in the solution. Not what they are — how many."
+  description="Calculate osmolarity, freezing point depression, boiling point elevation and vapor pressure lowering, with the Van't Hoff factor explained."
+>
+  <form slot="form" id="calc">
+    <input type="hidden" name="mode" value="osmolarity" />
+
+    <div class="modes" role="group" aria-label="Choose a property">
+      <button class="mode-btn" type="button" data-mode="osmolarity" aria-pressed="true">
+        Osmolarity
+      </button>
+      <button class="mode-btn" type="button" data-mode="freezing" aria-pressed="false">
+        Freezing point
+      </button>
+      <button class="mode-btn" type="button" data-mode="boiling" aria-pressed="false">
+        Boiling point
+      </button>
+      <button class="mode-btn" type="button" data-mode="vapor" aria-pressed="false">
+        Vapor pressure
+      </button>
+    </div>
+
+    <fieldset>
+      <legend>The solute</legend>
+      <div class="field-grid">
+        <Field label="Mass of solute (g)" name="mass" placeholder="9" />
+        <Field label="Molecular weight (g/mol)" name="mw" placeholder="58.44" />
+      </div>
+
+      <div class="field-grid">
+        <div class="field">
+          <label for="iPreset">How does it dissociate?</label>
+          <select id="iPreset" name="iPreset">
+            <option value="1">Non-electrolyte — dextrose, urea, glycerin (i = 1)</option>
+            <option value="2" selected>Two ions — NaCl, KCl (i = 2)</option>
+            <option value="3">Three ions — CaCl₂, Na₂SO₄, atropine sulfate (i = 3)</option>
+            <option value="4">Four ions — sodium citrate (i = 4)</option>
+            <option value="5">Five ions (i = 5)</option>
+            <option value="custom">Something else — I'll type it</option>
+          </select>
+        </div>
+        <Field
+          label="Van't Hoff factor (i)"
+          name="i"
+          value="2"
+          hint="Particles released per molecule when the compound dissolves."
+        />
+      </div>
+    </fieldset>
+
+    <div data-mode-panel="osmolarity">
+      <fieldset>
+        <legend>The solution</legend>
+        <div class="field-grid">
+          <Field label="Final volume (mL)" name="volume" placeholder="1000" />
+        </div>
+      </fieldset>
+      <div class="field-actions">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"osmolarity","mass":"9","mw":"58.44","i":"2","volume":"1000"}'
+        >
+          Example: 0.9% sodium chloride
+        </button>
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"osmolarity","mass":"50","mw":"198.17","i":"1","volume":"1000"}'
+        >
+          Example: 5% dextrose (monohydrate)
+        </button>
+      </div>
+    </div>
+
+    <div data-mode-panel="freezing" hidden>
+      <fieldset>
+        <legend>The solvent</legend>
+        <div class="field-grid">
+          <Field label="Mass of solvent (g)" name="solventMass" placeholder="100" />
+          <Field
+            label="Freezing point constant Kf"
+            name="kf"
+            value="1.86"
+            hint="1.86 °C·kg/mol for water."
+          />
+        </div>
+      </fieldset>
+      <div class="field-actions">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"freezing","mass":"0.9","mw":"58.44","i":"2","solventMass":"100","kf":"1.86"}'
+        >
+          Example: 0.9% sodium chloride
+        </button>
+      </div>
+    </div>
+
+    <div data-mode-panel="boiling" hidden>
+      <fieldset>
+        <legend>The solvent</legend>
+        <div class="field-grid">
+          <Field label="Mass of solvent (g)" name="solventMassB" placeholder="100" />
+          <Field
+            label="Boiling point constant Kb"
+            name="kb"
+            value="0.512"
+            hint="0.512 °C·kg/mol for water."
+          />
+        </div>
+      </fieldset>
+      <div class="field-actions">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"boiling","mass":"5.85","mw":"58.44","i":"2","solventMassB":"100","kb":"0.512"}'
+        >
+          Example: 1 molal sodium chloride
+        </button>
+      </div>
+    </div>
+
+    <div data-mode-panel="vapor" hidden>
+      <fieldset>
+        <legend>The solvent</legend>
+        <div class="field-grid">
+          <Field label="Mass of solvent (g)" name="solventMassV" placeholder="100" />
+          <Field
+            label="Solvent molecular weight (g/mol)"
+            name="solventMw"
+            value="18.02"
+            hint="18.02 g/mol for water."
+          />
+          <Field
+            label="Vapor pressure of pure solvent"
+            name="p0"
+            value="23.8"
+            hint="23.8 mmHg for water at 25 °C."
+          />
+        </div>
+      </fieldset>
+      <div class="field-actions">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"vapor","mass":"18","mw":"198.17","i":"1","solventMassV":"100","solventMw":"18.02","p0":"23.8"}'
+        >
+          Example: dextrose monohydrate in water
+        </button>
+      </div>
+    </div>
+
+    <div class="field-actions" style="margin-top:1.2rem">
+      <button class="btn btn--primary" type="submit">Calculate</button>
+      <button class="btn btn--quiet" type="reset">Clear</button>
+    </div>
+  </form>
+
+  <div slot="concept">
+    <h2>Counting particles, not molecules</h2>
+    <p>
+      A colligative property depends only on <strong>how many</strong> dissolved
+      particles are present, not on what those particles are. One mole of
+      dextrose and one mole of urea depress the freezing point of water by
+      exactly the same amount, because each contributes the same number of
+      particles.
+    </p>
+
+    <p>
+      Salts break the tidy one-to-one relationship. Dissolve one mole of sodium
+      chloride and you do not get one mole of particles — you get a mole of
+      sodium ions and a mole of chloride ions, so two moles in all. The Van't
+      Hoff factor <strong>i</strong> is what accounts for that. For a salt that
+      dissociates completely it is just the number of ions the formula contains:
+      <strong>i = 2</strong> for sodium chloride, 3 for calcium chloride.
+    </p>
+
+    <pre class="formula">        particles actually in solution
+   i =  ──────────────────────────────
+        molecules originally dissolved</pre>
+
+    <h3>The four properties</h3>
+    <p>All four fall out of the same particle count:</p>
+
+    <pre class="formula">osmolarity  =  (g/L ÷ MW) × i × 1000   mOsmol/L
+       ΔTf  =  Kf × m × i                 freezing drops
+       ΔTb  =  Kb × m × i                 boiling rises
+        ΔP  =  X(solute) × P°             vapor pressure drops</pre>
+
+    <p>
+      Here <em>m</em> is molality, moles of solute per kilogram of solvent —
+      not per liter of solution. For dilute aqueous preparations the two are
+      close enough to swap, but the distinction matters as concentration climbs.
+    </p>
+
+    <h3>The number worth memorizing</h3>
+    <p>
+      Blood freezes at <strong>−0.52 °C</strong>. A preparation that freezes at
+      close to the same temperature is carrying a similar particle load, which
+      is what iso-osmotic means. That single figure is the anchor for the whole
+      of tonicity adjustment.
+    </p>
+  </div>
+</CalcPage>
+
+<script>
+  import { setupCalculator, setupModes } from '../../scripts/calc.js';
+  import { solveColligative } from '../../scripts/solvers/colligative-properties.js';
+
+  const modeInput = document.querySelector('input[name="mode"]');
+  const iPreset = document.getElementById('iPreset');
+  const iField = document.querySelector('input[name="i"]');
+
+  function matchPresetToField() {
+    const match = Array.from(iPreset.options).find((o) => o.value === iField.value);
+    iPreset.value = match ? match.value : 'custom';
+  }
+
+  iPreset.addEventListener('change', () => {
+    if (iPreset.value !== 'custom') iField.value = iPreset.value;
+  });
+
+  // 'change' rather than 'input', so the dropdown doesn't jump around while
+  // a custom multi-character value is still being typed.
+  iField.addEventListener('change', matchPresetToField);
+
+  const calc = setupCalculator({
+    form: '#calc',
+    onPreset(preset) {
+      if (preset.mode) activate(preset.mode);
+      // Setting the i box from JS fires no change event, so the dissociation
+      // dropdown would otherwise keep describing the previous example.
+      if (preset.i !== undefined) matchPresetToField();
+    },
+    solve: solveColligative,
+  });
+
+  const activate = setupModes((mode) => {
+    modeInput.value = mode;
+    calc.clear();
+  });
+</script>

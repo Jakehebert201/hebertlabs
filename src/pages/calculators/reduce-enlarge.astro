@@ -1,0 +1,181 @@
+---
+import CalcPage from '../../components/CalcPage.astro';
+import Field from '../../components/Field.astro';
+---
+
+<CalcPage
+  title="Reducing & enlarging formulas"
+  kicker="Compounding"
+  lede="A formula tells you how to make one particular quantity. When you need a different quantity, every single ingredient scales by the same factor — no exceptions."
+>
+  <form slot="form" id="calc">
+    <fieldset>
+      <legend>Yields</legend>
+      <div class="field-grid">
+        <Field label="The formula makes" name="originalYield" placeholder="1000" />
+        <Field label="Unit of yield" name="yieldUnit" type="text" placeholder="mL" />
+        <Field label="You want to make" name="desiredYield" placeholder="120" />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Ingredients in the original formula</legend>
+      <div class="rows-head" aria-hidden="true">
+        <span>Ingredient</span>
+        <span>Amount</span>
+        <span>Unit</span>
+        <span></span>
+      </div>
+      <div class="rows" id="ingredients"></div>
+      <div class="field-actions">
+        <button class="btn btn--quiet btn--tiny" type="button" id="add-row">
+          + Add ingredient
+        </button>
+      </div>
+    </fieldset>
+
+    <div class="field-actions">
+      <button class="btn btn--primary" type="submit">Scale the formula</button>
+      <button class="btn btn--quiet" type="button" id="clear-all">Clear</button>
+    </div>
+
+    <div class="field-actions" style="margin-top:0.9rem">
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-rx-example='{"originalYield":"1000","yieldUnit":"mL","desiredYield":"120","rows":[["Active drug","25","g"],["Glycerin","100","mL"],["Syrup","300","mL"],["Purified water","600","mL"]]}'
+      >
+        Example: reduce to 120 mL
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-rx-example='{"originalYield":"100","yieldUnit":"g","desiredYield":"454","rows":[["Hydrocortisone","1","g"],["Liquid petrolatum","5","g"],["White petrolatum","94","g"]]}'
+      >
+        Example: enlarge to 1 lb
+      </button>
+    </div>
+  </form>
+
+  <div slot="concept">
+    <h2>One factor, applied to everything</h2>
+    <p>
+      A compounding formula is a set of fixed proportions. Change the batch
+      size and those proportions have to survive intact, which means you work
+      out a single scaling factor and apply it to every line:
+    </p>
+
+    <pre class="formula">              quantity you want to make
+   factor  =  ──────────────────────────
+              quantity the formula makes</pre>
+
+    <p>
+      A factor below 1 is <strong>reducing</strong>, above 1 is
+      <strong>enlarging</strong>. The factor itself has no units, because the
+      two yields are measured in the same thing and they cancel.
+    </p>
+
+    <h3>Every ingredient, including the boring ones</h3>
+    <p>
+      The vehicle, the preservative, the flavoring — all of it scales. Scaling
+      only the active ingredient is the classic mistake, and it quietly changes
+      the concentration of the finished product rather than the amount of it.
+    </p>
+
+    <h3>What about "qs ad"?</h3>
+    <p>
+      <em>Quantum sufficit ad</em> means "enough to make". A line reading
+      "purified water qs ad 100 mL" is not a fixed quantity, it is an
+      instruction to top up to the final volume. Scale the target volume, then
+      add however much it actually takes on the day. If you enter a qs
+      ingredient here, treat the number you get back as an estimate rather than
+      a measurement.
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>Check your work by adding up.</strong> When every ingredient is
+        measured in the same unit as the yield, the scaled amounts should sum
+        to the new batch size. If they don't, you missed a line.
+      </p>
+    </div>
+  </div>
+
+  <template id="row-template">
+    <div class="row-item" data-ing-row>
+      <input type="text" data-i="name" placeholder="Ingredient" aria-label="Ingredient name" autocomplete="off" />
+      <input type="number" step="any" inputmode="decimal" data-i="amount" placeholder="25" aria-label="Amount" autocomplete="off" />
+      <input type="text" data-i="unit" placeholder="g" aria-label="Unit" autocomplete="off" />
+      <button class="row-remove" type="button" data-remove aria-label="Remove ingredient">&times;</button>
+    </div>
+  </template>
+</CalcPage>
+
+<script>
+  import { setupCalculator } from '../../scripts/calc.js';
+  import { solveReduceEnlarge } from '../../scripts/solvers/reduce-enlarge.js';
+
+  const listEl = document.getElementById('ingredients');
+  const template = document.getElementById('row-template');
+
+  function addRow(values) {
+    const row = template.content.querySelector('.row-item').cloneNode(true);
+
+    if (values) {
+      const [name, amount, unit] = values;
+      row.querySelector('[data-i="name"]').value = name;
+      row.querySelector('[data-i="amount"]').value = amount;
+      row.querySelector('[data-i="unit"]').value = unit;
+    }
+
+    row.querySelector('[data-remove]').addEventListener('click', () => {
+      row.remove();
+      if (!listEl.querySelector('[data-ing-row]')) addRow();
+      listEl.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+
+    listEl.append(row);
+    return row;
+  }
+
+  function readRows() {
+    return Array.from(listEl.querySelectorAll('[data-ing-row]'))
+      .map((row) => ({
+        name: row.querySelector('[data-i="name"]').value.trim(),
+        amount: row.querySelector('[data-i="amount"]').value.trim(),
+        unit: row.querySelector('[data-i="unit"]').value.trim(),
+      }))
+      .filter((row) => row.name || row.amount || row.unit);
+  }
+
+  const calc = setupCalculator({
+    form: '#calc',
+    solve: (v) => solveReduceEnlarge({ ...v, rows: readRows() }),
+  });
+
+  document.getElementById('add-row').addEventListener('click', () => addRow());
+
+  document.getElementById('clear-all').addEventListener('click', () => {
+    document.getElementById('calc').reset();
+    listEl.replaceChildren();
+    addRow();
+    calc.clear();
+  });
+
+  for (const button of document.querySelectorAll('[data-rx-example]')) {
+    button.addEventListener('click', () => {
+      const preset = JSON.parse(button.dataset.rxExample);
+      const form = document.getElementById('calc');
+      form.elements.originalYield.value = preset.originalYield;
+      form.elements.yieldUnit.value = preset.yieldUnit;
+      form.elements.desiredYield.value = preset.desiredYield;
+      listEl.replaceChildren();
+      preset.rows.forEach((row) => addRow(row));
+      calc.run();
+    });
+  }
+
+  addRow();
+  addRow();
+  addRow();
+</script>

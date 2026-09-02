@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate, toDate } from '../../utils/date.js';
+import { withTrailingSlash } from '../../utils/url.js';
+
+const noteModules = Object.values(import.meta.glob('./*.md', { eager: true }));
+
+const notes = noteModules
+  .filter((note) => !note.frontmatter?.draft)
+  .sort((a, b) => {
+    const dateA = toDate(a.frontmatter?.date)?.getTime() ?? 0;
+    const dateB = toDate(b.frontmatter?.date)?.getTime() ?? 0;
+    return dateB - dateA;
+  });
+---
+
+<BaseLayout
+  title="Notes"
+  description="Study notes on pharmacy calculations and the concepts behind them."
+>
+  <div class="page-intro">
+    <p class="kicker">Notes</p>
+    <h1>Study notes</h1>
+    <p class="lede">
+      Things I've had to work out properly in order to stop getting them wrong.
+      Written mostly for my own revision, but if they're useful to anyone else,
+      all the better.
+    </p>
+  </div>
+
+  {
+    notes.length === 0 ? (
+      <p class="empty-state">No notes published yet.</p>
+    ) : (
+      <ul class="note-list">
+        {notes.map((note) => (
+          <li>
+            <a class="note-link" href={withTrailingSlash(note.url)}>
+              <span class="note-link__meta">
+                {formatDate(note.frontmatter.date)}
+                {note.frontmatter.topic ? ` · ${note.frontmatter.topic}` : ''}
+              </span>
+              <h2 class="note-link__title">{note.frontmatter.title}</h2>
+              <p class="note-link__desc">{note.frontmatter.description}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</BaseLayout>

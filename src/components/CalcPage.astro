@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const { title, kicker, lede, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description || lede}>
+  <a class="backlink" href="/calculators/">&larr; All calculators</a>
+
+  <div class="page-intro">
+    {kicker ? <p class="kicker">{kicker}</p> : null}
+    <h1>{title}</h1>
+    <p class="lede">{lede}</p>
+  </div>
+
+  <div class="calc-layout" data-calc>
+    <div>
+      <div class="panel">
+        <p class="panel__label">Calculator</p>
+        <slot name="form" />
+      </div>
+
+      <p class="error-msg" data-error hidden></p>
+
+      <div class="panel solution" data-solution hidden>
+        <p class="panel__label">Worked solution</p>
+        <div class="answer">
+          <p class="answer__label" data-answer-label>Answer</p>
+          <p class="answer__value" data-answer-value></p>
+          <p class="answer__note" data-answer-note hidden></p>
+        </div>
+        <ol class="steps" data-steps></ol>
+        <div data-extra></div>
+      </div>
+    </div>
+
+    <aside class="concept">
+      <slot name="concept" />
+    </aside>
+  </div>
+
+  <slot />
+</BaseLayout>

@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { calculators } from '../../data/calculators.js';
+
+const groups = calculators.reduce((acc, calc) => {
+  (acc[calc.tag] ||= []).push(calc);
+  return acc;
+}, {});
+---
+
+<BaseLayout
+  title="Calculators"
+  description="Pharmacy calculation tools that show every step of the working, built for learning the fundamentals rather than just getting an answer."
+>
+  <div class="page-intro">
+    <p class="kicker">Calculators</p>
+    <h1>Tools that show their working</h1>
+    <p class="lede">
+      Every calculator here prints the full solution, step by step, with your
+      own numbers substituted in. The answer is the least interesting part —
+      the point is to see how the setup was built so you can do it without the
+      tool next time.
+    </p>
+  </div>
+
+  {
+    Object.entries(groups).map(([tag, items]) => (
+      <section style="margin-bottom:2.5rem">
+        <h2>{tag}</h2>
+        <ul class="card-grid">
+          {items.map((calc) => (
+            <li>
+              <a class="card" href={calc.href}>
+                <h3 class="card__title">{calc.title}</h3>
+                <p class="card__desc">{calc.desc}</p>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+
+  <div class="callout" style="max-width:68ch">
+    <p>
+      <strong>These are study aids, not clinical tools.</strong> They are here
+      to help the math make sense. Check anything that matters against your
+      course material and a pharmacist.
+    </p>
+  </div>
+</BaseLayout>

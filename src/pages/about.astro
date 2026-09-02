@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About"
+  description="What this site is and who is behind it."
+>
+  <div class="shell--narrow">
+    <div class="page-intro">
+      <p class="kicker">About</p>
+      <h1>What this is</h1>
+    </div>
+
+    <div class="prose">
+      <p>
+        I'm Jacob, a pharmacy student. This site is where I put the calculation
+        tools and notes I make while working through the material.
+      </p>
+
+      <h2>Why build it</h2>
+      <p>
+        Pharmacy calculations are not conceptually hard, but they are
+        unforgiving. A misplaced decimal or an upside-down conversion factor
+        produces an answer that looks perfectly reasonable and is completely
+        wrong. The way past that is not memorizing more formulas. It's being
+        able to see the setup clearly enough to know when it's wrong.
+      </p>
+      <p>
+        Most calculators online are built for people who already understand the
+        problem and just want the arithmetic done. The ones here go the other
+        way. They print the whole solution: what the setup looks like, where
+        your numbers go, which units cancel, and how the answer falls out. If
+        you use one and then find you can do the next problem without it,
+        that's the tool working as intended.
+      </p>
+
+      <h2>Who it's for</h2>
+      <p>
+        Mostly me. But a lot of people in my year hit the same walls on the
+        basics (proportions, dimensional analysis, percentage strength), and
+        those walls tend to stay up because everyone is too busy to go back and
+        rebuild the foundation. If you're in that position, these are aimed
+        squarely at you.
+      </p>
+
+      <h2>A word of caution</h2>
+      <p>
+        Everything here is a study aid written by a student. I've been careful,
+        but careful is not the same as authoritative. Check anything that
+        matters against your course material, an official reference, and a
+        pharmacist. Don't let a calculator on a personal website be the last
+        thing standing between a number and a patient.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

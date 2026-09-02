@@ -1,0 +1,52 @@
+# Example Nginx server block for Hebert Labs (static Astro output).
+# Copy ideas into your live site config under /etc/nginx/sites-available/.
+# Do NOT drop this file in place blindly — adjust server_name, TLS paths, and root.
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name hebertlabs.com www.hebertlabs.com;
+
+    # After certbot: listen 443 ssl http2; and include ssl_certificate lines.
+
+    root /var/www/hebertlabs;
+    index index.html;
+
+    # ACME HTTP-01 challenges (certbot webroot). deploy_to_live.sh preserves this directory.
+    location ^~ /.well-known/acme-challenge/ {
+        allow all;
+    }
+
+    # Astro emits directory-style URLs: /calculators/proportions/index.html
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+    }
+
+    # --- compression ---
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 256;
+    gzip_types
+        text/plain
+        text/css
+        text/xml
+        application/javascript
+        application/json
+        image/svg+xml;
+
+    # --- basic security headers ---
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    # Cache hashed Astro assets aggressively; HTML stays fresh.
+    location /_astro/ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+}

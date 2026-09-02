@@ -1,0 +1,31 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { formatDate, toISO } from '../utils/date.js';
+
+const { frontmatter } = Astro.props;
+const { title, description, date, topic } = frontmatter;
+
+const readable = formatDate(date);
+const machine = toISO(date);
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="shell--narrow">
+    <a class="backlink" href="/notes/">&larr; All notes</a>
+
+    <article>
+      <header class="note-header">
+        <span class="note-link__meta">
+          {machine ? <time datetime={machine}>{readable}</time> : null}
+          {topic ? <span>{machine ? ' · ' : ''}{topic}</span> : null}
+        </span>
+        <h1>{title}</h1>
+        {description ? <p class="lede">{description}</p> : null}
+      </header>
+
+      <div class="prose">
+        <slot />
+      </div>
+    </article>
+  </div>
+</BaseLayout>

@@ -1,0 +1,144 @@
+---
+import CalcPage from '../../components/CalcPage.astro';
+import Field from '../../components/Field.astro';
+---
+
+<CalcPage
+  title="Percentage strength"
+  kicker="Concentration"
+  lede="A percentage is not really a number to plug into a formula — it is a conversion factor in disguise. Once you write it as one, these problems become unit cancellation and nothing more."
+>
+  <form slot="form" id="calc">
+    <div class="field-grid">
+      <div class="field field--wide">
+        <label for="kind">Type of percentage strength</label>
+        <select id="kind" name="kind">
+          <option value="w/v">% w/v — grams in 100 mL (solutions)</option>
+          <option value="w/w">% w/w — grams in 100 g (ointments, creams)</option>
+          <option value="v/v">% v/v — mL in 100 mL (liquid in liquid)</option>
+        </select>
+        <span class="hint">
+          Pick the one that matches how the preparation is described.
+        </span>
+      </div>
+    </div>
+
+    <div class="field-grid">
+      <Field label="Percentage strength (%)" name="percent" placeholder="5" />
+      <Field
+        label="Amount of active ingredient"
+        name="amount"
+        placeholder="leave blank"
+      />
+      <Field label="Total quantity of preparation" name="total" placeholder="500" />
+    </div>
+
+    <p class="hint" style="margin-top:-0.6rem">
+      Fill in two of the three boxes. Leave the one you want empty.
+      Units are set automatically by the type you chose above.
+    </p>
+
+    <div class="field-actions">
+      <button class="btn btn--primary" type="submit">Solve</button>
+      <button class="btn btn--quiet" type="reset">Clear</button>
+    </div>
+
+    <div class="field-actions" style="margin-top:0.9rem">
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"kind":"w/v","percent":"5","amount":"","total":"500"}'
+      >
+        Example: D5W 500 mL
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"kind":"w/w","percent":"","amount":"2","total":"60"}'
+      >
+        Example: ointment % w/w
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"kind":"w/v","percent":"0.9","amount":"4.5","total":""}'
+      >
+        Example: normal saline volume
+      </button>
+    </div>
+  </form>
+
+  <div slot="concept">
+    <h2>A percentage is a conversion factor</h2>
+    <p>
+      Percent means "per hundred". What the hundred is measuring is the only
+      difference between the three types:
+    </p>
+
+    <ul>
+      <li><strong>% w/v</strong> — grams of ingredient in 100 mL of preparation.</li>
+      <li><strong>% w/w</strong> — grams of ingredient in 100 g of preparation.</li>
+      <li><strong>% v/v</strong> — milliliters of ingredient in 100 mL of preparation.</li>
+    </ul>
+
+    <p>
+      So the moment you read "5% w/v", write it down as a fraction. That
+      fraction is a true equality, which means you are allowed to multiply by
+      it without changing anything:
+    </p>
+
+    <pre class="formula">  5 g
+────────
+ 100 mL</pre>
+
+    <p>
+      Need the grams in 500 mL? Multiply, with milliliters on the bottom so
+      they cancel:
+    </p>
+
+    <pre class="formula">          5 g
+500 mL × ──────  =  25 g
+         100 mL</pre>
+
+    <h3>Going the other way, flip the factor</h3>
+    <p>
+      If you know the grams and want the volume, use the same factor upside
+      down so that grams are the thing that cancels:
+    </p>
+
+    <pre class="formula">          100 mL
+4.5 g × ─────────  =  500 mL
+          0.9 g</pre>
+
+    <p>
+      There is no separate rule for "solving backwards". You are always
+      multiplying by the same factor — the only decision is which way up it
+      goes, and the unit you want to get rid of tells you.
+    </p>
+
+    <h3>Finding the percentage itself</h3>
+    <p>
+      If the percentage is what's missing, ask the question percent is already
+      asking: <em>how much ingredient is in 100 of preparation?</em> Start with
+      100 and cancel down. Whatever survives is the percentage.
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>The shortcut worth memorizing:</strong> for % w/v, multiply the
+        percentage by 10 to get mg/mL. So 0.9% w/v is 9 mg/mL, and 5% w/v is
+        50 mg/mL. It saves a step constantly.
+      </p>
+    </div>
+  </div>
+</CalcPage>
+
+<script>
+  import { setupCalculator } from '../../scripts/calc.js';
+  import { solvePercentageStrength } from '../../scripts/solvers/percentage-strength.js';
+
+  setupCalculator({
+    form: '#calc',
+    solve: solvePercentageStrength,
+  });
+</script>

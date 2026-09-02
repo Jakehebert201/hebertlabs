@@ -1,0 +1,205 @@
+---
+import CalcPage from '../../components/CalcPage.astro';
+import Field from '../../components/Field.astro';
+---
+
+<CalcPage
+  title="Dimensional analysis"
+  kicker="Foundations"
+  lede="Multiply by conversion factors until the units you don't want cancel and the units you do want survive. If the units come out right, the arithmetic almost always is too."
+>
+  <form slot="form" id="calc">
+    <fieldset>
+      <legend>Start with what you were given</legend>
+      <div class="field-grid">
+        <Field label="Amount" name="startValue" placeholder="150" />
+        <Field label="Unit" name="startUnit" type="text" placeholder="lb" />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Multiply by conversion factors</legend>
+      <div class="factor-head" aria-hidden="true">
+        <span>Top amount</span>
+        <span>Top unit</span>
+        <span>Bottom amount</span>
+        <span>Bottom unit</span>
+        <span></span>
+      </div>
+      <div id="factors"></div>
+      <div class="field-actions">
+        <button class="btn btn--quiet btn--tiny" type="button" id="add-factor">
+          + Add another factor
+        </button>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Optional check</legend>
+      <div class="field-grid">
+        <Field
+          label="Unit you expect to end up with"
+          name="targetUnit"
+          type="text"
+          placeholder="mg"
+          hint="Leave blank to skip. If you fill it in, the tool will tell you whether your factors actually get you there."
+          wide
+        />
+      </div>
+    </fieldset>
+
+    <div class="field-actions">
+      <button class="btn btn--primary" type="submit">Solve</button>
+      <button class="btn btn--quiet" type="button" id="clear-all">Clear</button>
+    </div>
+
+    <div class="field-actions" style="margin-top:0.9rem">
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-da-example='{"startValue":"0.5","startUnit":"g","targetUnit":"mg","factors":[["1000","mg","1","g"]]}'
+      >
+        Example: grams to mg
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-da-example='{"startValue":"150","startUnit":"lb","targetUnit":"mg","factors":[["1","kg","2.2","lb"],["2","mg","1","kg"]]}'
+      >
+        Example: weight-based dose
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-da-example='{"startValue":"2","startUnit":"tsp","targetUnit":"mg","factors":[["5","mL","1","tsp"],["250","mg","5","mL"]]}'
+      >
+        Example: teaspoons to mg
+      </button>
+    </div>
+  </form>
+
+  <div slot="concept">
+    <h2>Let the units do the thinking</h2>
+    <p>
+      Dimensional analysis works because a conversion factor is really just a
+      fancy way of writing the number one. Since 1000 mg and 1 g are the same
+      amount of stuff, this fraction equals 1:
+    </p>
+
+    <pre class="formula">1000 mg
+─────── = 1
+  1 g</pre>
+
+    <p>
+      Multiplying by 1 never changes the value of anything. It only changes the
+      units it is dressed in. So you can multiply as many times as you like,
+      as long as each factor is a true equality.
+    </p>
+
+    <h3>Which way up does the factor go?</h3>
+    <p>
+      Put the unit you are trying to <strong>get rid of</strong> on the bottom,
+      so it cancels against the same unit on the top of the previous term. Put
+      the unit you are trying to <strong>reach</strong> on top. That single rule
+      decides the orientation every time, so you never have to guess whether to
+      multiply or divide.
+    </p>
+
+    <pre class="formula">           1 kg       2 mg
+150 lb ×  ──────  ×  ──────  =  136 mg
+          2.2 lb      1 kg</pre>
+
+    <p>
+      Pounds cancel against pounds, kilograms cancel against kilograms, and
+      milligrams are the only thing left standing. That is your answer's unit.
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>This is your error check.</strong> If you finish and the
+        leftover unit is something absurd like <code>lb²/mg</code>, you flipped
+        a factor. Fix the orientation rather than reaching for the calculator
+        again.
+      </p>
+    </div>
+  </div>
+
+  <template id="factor-template">
+    <div class="factor-row" data-factor-row>
+      <input type="number" step="any" inputmode="decimal" data-f="numValue" aria-label="Top amount" placeholder="1000" autocomplete="off" />
+      <input type="text" data-f="numUnit" aria-label="Top unit" placeholder="mg" autocomplete="off" />
+      <input type="number" step="any" inputmode="decimal" data-f="denValue" aria-label="Bottom amount" placeholder="1" autocomplete="off" />
+      <input type="text" data-f="denUnit" aria-label="Bottom unit" placeholder="g" autocomplete="off" />
+      <button class="row-remove" type="button" data-remove aria-label="Remove this factor">&times;</button>
+    </div>
+  </template>
+</CalcPage>
+
+<script>
+  import { setupCalculator } from '../../scripts/calc.js';
+  import { solveDimensionalAnalysis } from '../../scripts/solvers/dimensional-analysis.js';
+
+  const factorsEl = document.getElementById('factors');
+  const template = document.getElementById('factor-template');
+
+  function addRow(values) {
+    const row = template.content.querySelector('.factor-row').cloneNode(true);
+
+    if (values) {
+      const [numValue, numUnit, denValue, denUnit] = values;
+      row.querySelector('[data-f="numValue"]').value = numValue;
+      row.querySelector('[data-f="numUnit"]').value = numUnit;
+      row.querySelector('[data-f="denValue"]').value = denValue;
+      row.querySelector('[data-f="denUnit"]').value = denUnit;
+    }
+
+    row.querySelector('[data-remove]').addEventListener('click', () => {
+      row.remove();
+      if (!factorsEl.querySelector('[data-factor-row]')) addRow();
+      factorsEl.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+
+    factorsEl.append(row);
+    return row;
+  }
+
+  function readFactors() {
+    return Array.from(factorsEl.querySelectorAll('[data-factor-row]'))
+      .map((row) => ({
+        numValue: row.querySelector('[data-f="numValue"]').value.trim(),
+        numUnit: row.querySelector('[data-f="numUnit"]').value.trim(),
+        denValue: row.querySelector('[data-f="denValue"]').value.trim(),
+        denUnit: row.querySelector('[data-f="denUnit"]').value.trim(),
+      }))
+      .filter((f) => f.numValue || f.numUnit || f.denValue || f.denUnit);
+  }
+
+  const calc = setupCalculator({
+    form: '#calc',
+    solve: (v) => solveDimensionalAnalysis({ ...v, factors: readFactors() }),
+  });
+
+  document.getElementById('add-factor').addEventListener('click', () => addRow());
+
+  document.getElementById('clear-all').addEventListener('click', () => {
+    document.getElementById('calc').reset();
+    factorsEl.replaceChildren();
+    addRow();
+    calc.clear();
+  });
+
+  for (const button of document.querySelectorAll('[data-da-example]')) {
+    button.addEventListener('click', () => {
+      const preset = JSON.parse(button.dataset.daExample);
+      const form = document.getElementById('calc');
+      form.elements.startValue.value = preset.startValue;
+      form.elements.startUnit.value = preset.startUnit;
+      form.elements.targetUnit.value = preset.targetUnit || '';
+      factorsEl.replaceChildren();
+      preset.factors.forEach((factor) => addRow(factor));
+      calc.run();
+    });
+  }
+
+  addRow();
+</script>

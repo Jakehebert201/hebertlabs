@@ -1,0 +1,114 @@
+---
+import CalcPage from '../../components/CalcPage.astro';
+import Field from '../../components/Field.astro';
+---
+
+<CalcPage
+  title="Specific gravity"
+  kicker="Concentration"
+  lede="The bridge between weight and volume. When a formula gives you milliliters but your balance measures grams, specific gravity is what gets you across."
+>
+  <form slot="form" id="calc">
+    <div class="field-grid">
+      <Field
+        label="Specific gravity"
+        name="sg"
+        placeholder="1.25"
+        hint="No units — it is a ratio."
+      />
+      <Field label="Mass (g)" name="mass" placeholder="leave blank" />
+      <Field label="Volume (mL)" name="volume" placeholder="100" />
+    </div>
+
+    <p class="hint" style="margin-top:-0.6rem">
+      Fill in two boxes and leave the third empty.
+    </p>
+
+    <div class="field-actions">
+      <button class="btn btn--primary" type="submit">Solve</button>
+      <button class="btn btn--quiet" type="reset">Clear</button>
+    </div>
+
+    <div class="field-actions" style="margin-top:0.9rem">
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"sg":"1.25","mass":"","volume":"100"}'
+      >
+        Example: glycerin
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"sg":"0.816","mass":"500","volume":""}'
+      >
+        Example: alcohol by weight
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"sg":"","mass":"60","volume":"50"}'
+      >
+        Example: find the sg
+      </button>
+    </div>
+  </form>
+
+  <div slot="concept">
+    <h2>A number with no units</h2>
+    <p>
+      Specific gravity compares the density of your substance to the density of
+      water at the same temperature:
+    </p>
+
+    <pre class="formula">           density of the substance
+   sg  =  ─────────────────────────
+             density of water</pre>
+
+    <p>
+      Because both the top and the bottom are densities, the units cancel and
+      you are left with a bare number. That is not a mistake — it is the whole
+      point. It makes specific gravity a pure scaling factor.
+    </p>
+
+    <h3>Why it collapses to mass over volume</h3>
+    <p>
+      Water has a density of almost exactly <strong>1 g/mL</strong>. Dividing
+      by 1 changes nothing, so in practice:
+    </p>
+
+    <pre class="formula">   sg  =  mass in grams  ÷  volume in milliliters</pre>
+
+    <p>
+      This is why a substance with an sg of 1.25 weighs 1.25 times what the
+      same volume of water would. 100 mL of it weighs 125 g.
+    </p>
+
+    <h3>Reading the number</h3>
+    <p>
+      Above 1 means denser than water and it sinks — glycerin, syrup, most
+      concentrated acids. Below 1 means lighter than water and it floats —
+      alcohol, most oils. Petrolatum sits just under 1, which is worth
+      remembering for ointment work.
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>Temperature is part of the definition.</strong> Densities shift
+        with heat, so an official specific gravity is quoted at a stated
+        temperature, usually 25&nbsp;°C. In coursework you can normally ignore
+        this, but it is the reason the value is never quite exact.
+      </p>
+    </div>
+  </div>
+</CalcPage>
+
+<script>
+  import { setupCalculator } from '../../scripts/calc.js';
+  import { solveSpecificGravity } from '../../scripts/solvers/specific-gravity.js';
+
+  setupCalculator({
+    form: '#calc',
+    solve: solveSpecificGravity,
+  });
+</script>
