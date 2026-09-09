@@ -28,6 +28,12 @@ export const calculators = [
     desc: 'ppm is just mg/L and ppb is just mcg/L. Convert between those, percentage strength and ratio strength by canceling units rather than memorizing formulas.',
   },
   {
+    href: '/calculators/concentration-dilution/',
+    title: 'Concentration and dilution',
+    tag: 'Concentration',
+    desc: 'Solve M1V1 = M2V2 for whichever value is missing, then find the number the question is really asking for: how much diluent to add.',
+  },
+  {
     href: '/calculators/specific-gravity/',
     title: 'Specific gravity',
     tag: 'Concentration',

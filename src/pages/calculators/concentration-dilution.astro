@@ -1,0 +1,180 @@
+---
+import CalcPage from '../../components/CalcPage.astro';
+import Field from '../../components/Field.astro';
+---
+
+<CalcPage
+  title="Concentration and dilution"
+  kicker="Concentration"
+  lede="M1V1 = M2V2 is memorable once you see where it comes from. Fill in three of the four boxes, leave the fourth empty, and this solves it and tells you how much diluent to add."
+  description="Solve M1V1 = M2V2 for any missing value, in percent, mg/mL, molarity or ratio strength, and find the volume of diluent to add."
+>
+  <form slot="form" id="calc">
+    <div class="field-grid">
+      <div class="field">
+        <label for="concUnit">Concentration unit</label>
+        <select id="concUnit" name="concUnit">
+          <option value="percent">Percentage strength (%)</option>
+          <option value="mgml">mg/mL</option>
+          <option value="molar">Molarity (M)</option>
+          <option value="ratio">Ratio strength (1 : X)</option>
+        </select>
+        <span class="hint">
+          Applies to both strengths. The formula only needs the two to match
+          each other, so any unit works as long as it is the same on both
+          sides.
+        </span>
+      </div>
+      <div class="field">
+        <label for="volUnit">Volume unit</label>
+        <select id="volUnit" name="volUnit">
+          <option value="mL">Milliliters (mL)</option>
+          <option value="L">Liters (L)</option>
+        </select>
+        <span class="hint">Applies to both volumes.</span>
+      </div>
+    </div>
+
+    <fieldset>
+      <legend>What you start with</legend>
+      <div class="field-grid">
+        <Field label="Starting strength (M1)" name="m1" placeholder="95" />
+        <Field label="Starting volume (V1)" name="v1" placeholder="280" />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>What you want to end up with</legend>
+      <div class="field-grid">
+        <Field label="Final strength (M2)" name="m2" placeholder="70" />
+        <Field label="Final volume (V2)" name="v2" placeholder="leave blank" />
+      </div>
+    </fieldset>
+
+    <p class="hint" style="margin-top:-0.6rem">
+      Fill in three of the four boxes and leave the one you want empty. For a
+      ratio strength, enter only the X, so 1 : 1000 goes in as 1000.
+    </p>
+
+    <div class="field-actions">
+      <button class="btn btn--primary" type="submit">Solve</button>
+      <button class="btn btn--quiet" type="reset">Clear</button>
+    </div>
+
+    <div class="field-actions" style="margin-top:0.9rem">
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"concUnit":"percent","volUnit":"mL","m1":"95","v1":"280","m2":"70","v2":""}'
+      >
+        Example: 70% alcohol from 95%
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"concUnit":"percent","volUnit":"mL","m1":"10","v1":"100","m2":"2","v2":""}'
+      >
+        Example: how much water to add
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"concUnit":"mgml","volUnit":"mL","m1":"250","v1":"","m2":"25","v2":"10"}'
+      >
+        Example: pediatric dose from stock
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"concUnit":"ratio","volUnit":"mL","m1":"1000","v1":"1","m2":"","v2":"10"}'
+      >
+        Example: 1:1000 epinephrine
+      </button>
+    </div>
+  </form>
+
+  <div slot="concept">
+    <h2>Nothing is added except diluent</h2>
+    <p>
+      When you dilute something, you do not touch the drug. You only give it
+      more room. The 250 mg that was sitting in 1 mL of stock is still 250 mg
+      after you add 9 mL of water, just spread through 10 mL instead of 1.
+    </p>
+
+    <p>
+      That is the whole idea, and it is why the formula exists. Strength times
+      volume is the amount of drug:
+    </p>
+
+    <pre class="formula">strength × volume  =  amount of drug</pre>
+
+    <p>
+      Since diluting cannot change the amount of drug, that product has to come
+      out the same before and after. Write it both ways and set them equal:
+    </p>
+
+    <pre class="formula">M1 × V1  =  M2 × V2</pre>
+
+    <p>
+      M1 and V1 describe the stock you measure out. M2 and V2 describe the
+      finished preparation. It is not a rule to memorize so much as a sentence:
+      the drug you had is the drug you have.
+    </p>
+
+    <h3>Why the units barely matter</h3>
+    <p>
+      Both sides are the same kind of quantity, so anything that scales with
+      strength cancels out. Percent, mg/mL, molarity: all of them work, and you
+      never have to convert. The only requirement is that M1 and M2 are in the
+      same unit as each other, and V1 and V2 are in the same unit as each
+      other.
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>Ratio strength is the exception.</strong> A ratio strength runs
+        backwards, because 1 : 1000 is weaker than 1 : 100. Turn it into a
+        concentration first by dividing 1 by the X, then use that. Feeding 1000
+        and 100 straight into the formula inverts the whole problem.
+      </p>
+    </div>
+
+    <h3>The number the question actually wants</h3>
+    <p>
+      The formula hands you V2, the total finished volume. Exam questions
+      almost never ask for that. They ask how much water, or syrup, or saline
+      you add, and that is the difference:
+    </p>
+
+    <pre class="formula">diluent  =  V2 − V1</pre>
+
+    <p>
+      This matters at the bench too. You do not pour out 10 mL of anything. You
+      measure 1 mL of stock, then add 9 mL of diluent to it.
+    </p>
+
+    <h3>The sanity check</h3>
+    <p>
+      A dilution makes the strength go <strong>down</strong> and the volume go
+      <strong>up</strong>. Always. If your answer moved either one the other
+      way, you have M1 and M2 swapped, so fix the setup rather than trusting
+      the number.
+    </p>
+
+    <p>
+      The same equation does describe concentrating a solution, by boiling
+      water off, and this tool will still solve it. It just says so, because on
+      a dilution problem a rising strength is nearly always a mistake.
+    </p>
+  </div>
+</CalcPage>
+
+<script>
+  import { setupCalculator } from '../../scripts/calc.js';
+  import { solveConcentrationDilution } from '../../scripts/solvers/concentration-dilution.js';
+
+  setupCalculator({
+    form: '#calc',
+    solve: solveConcentrationDilution,
+  });
+</script>
