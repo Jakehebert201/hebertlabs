@@ -1,0 +1,290 @@
+---
+import CalcPage from '../../components/CalcPage.astro';
+import Field from '../../components/Field.astro';
+---
+
+<CalcPage
+  title="Alligations"
+  kicker="Compounding"
+  lede="Two ways to mix strengths. Alternate finds how much of a stronger and a weaker stock to combine to hit a desired strength. Medial finds the average strength you get when the quantities are already known."
+  description="Alligation alternate and alligation medial, with the grid, the parts, and every step of the weighted average shown."
+>
+  <form slot="form" id="calc">
+    <input type="hidden" name="mode" value="alternate" />
+
+    <div class="modes" role="group" aria-label="Choose an alligation method">
+      <button class="mode-btn" type="button" data-mode="alternate" aria-pressed="true">
+        Alternate
+      </button>
+      <button class="mode-btn" type="button" data-mode="medial" aria-pressed="false">
+        Medial
+      </button>
+    </div>
+
+    <fieldset>
+      <legend>Units</legend>
+      <div class="field-grid">
+        <Field label="Strength unit" name="strengthUnit" type="text" value="%" placeholder="%" />
+        <Field label="Quantity unit" name="qtyUnit" type="text" value="mL" placeholder="mL" />
+      </div>
+    </fieldset>
+
+    <div data-mode-panel="alternate">
+      <fieldset>
+        <legend>The two stocks and the strength you want</legend>
+        <div class="field-grid">
+          <Field label="Higher strength" name="high" placeholder="95" />
+          <Field label="Desired strength" name="desired" placeholder="70" />
+          <Field
+            label="Lower strength"
+            name="low"
+            placeholder="50"
+            hint="Use 0 when the weaker component is a diluent with no active ingredient."
+          />
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Batch size (optional)</legend>
+        <div class="field-grid">
+          <Field
+            label="Total quantity to make"
+            name="total"
+            placeholder="leave blank for parts only"
+            hint="Leave empty to get the part ratio alone. Fill it in to scale those parts to a real volume or mass."
+          />
+        </div>
+      </fieldset>
+
+      <div class="field-actions">
+        <button class="btn btn--primary" type="submit">Solve</button>
+        <button class="btn btn--quiet" type="reset">Clear</button>
+      </div>
+
+      <div class="field-actions" style="margin-top:0.9rem">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"alternate","strengthUnit":"%","qtyUnit":"mL","high":"95","desired":"70","low":"50","total":""}'
+        >
+          Example: 95% and 50% → 70%
+        </button>
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"alternate","strengthUnit":"%","qtyUnit":"mL","high":"95","desired":"70","low":"0","total":"1000"}'
+        >
+          Example: 70% alcohol from 95% and water
+        </button>
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"alternate","strengthUnit":"%","qtyUnit":"g","high":"10","desired":"2.5","low":"1","total":"30"}'
+        >
+          Example: ointment from two strengths
+        </button>
+      </div>
+    </div>
+
+    <div data-mode-panel="medial" hidden>
+      <fieldset>
+        <legend>Components you are mixing</legend>
+        <div class="rows-head" aria-hidden="true">
+          <span>Label (optional)</span>
+          <span>Strength</span>
+          <span>Quantity</span>
+          <span></span>
+        </div>
+        <div class="rows" id="components"></div>
+        <div class="field-actions">
+          <button class="btn btn--quiet btn--tiny" type="button" id="add-row">
+            + Add component
+          </button>
+        </div>
+      </fieldset>
+
+      <div class="field-actions">
+        <button class="btn btn--primary" type="submit">Solve</button>
+        <button class="btn btn--quiet" type="button" id="clear-medial">Clear</button>
+      </div>
+
+      <div class="field-actions" style="margin-top:0.9rem">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-medial-example='{"strengthUnit":"%","qtyUnit":"mL","rows":[["40% alcohol","40","300"],["70% alcohol","70","200"]]}'
+        >
+          Example: 300 mL of 40% + 200 mL of 70%
+        </button>
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-medial-example='{"strengthUnit":"%","qtyUnit":"g","rows":[["Hydrocortisone 1%","1","20"],["Hydrocortisone 2.5%","2.5","30"],["Base (0%)","0","50"]]}'
+        >
+          Example: three ointments
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div slot="concept">
+    <h2>Two problems, two methods</h2>
+    <p>
+      Alligation is just a name for mixing preparations of different strengths.
+      Which method you reach for depends on what you already know.
+    </p>
+
+    <h3>Alternate: find the parts</h3>
+    <p>
+      You know the two stocks and the strength you want in between them. The
+      grid writes the answer without algebra:
+    </p>
+
+    <pre class="formula">higher ──── parts of higher = desired − lower
+         \  /
+        desired
+         /  \
+lower ──── parts of lower  = higher − desired</pre>
+
+    <p>
+      Those parts are a ratio. Scale them to whatever batch size the
+      prescription asks for, and you know how much of each stock to measure.
+    </p>
+
+    <h3>Medial: find the average</h3>
+    <p>
+      You already know how much of each strength you are putting in. The
+      finished strength is the weighted average:
+    </p>
+
+    <pre class="formula">        Σ (strength × quantity)
+average = ─────────────────────────
+              Σ quantity</pre>
+
+    <div class="callout">
+      <p>
+        <strong>They are not interchangeable.</strong> Alternate starts from a
+        target strength and finds the mix. Medial starts from a known mix and
+        finds the strength. Pick the one that matches the information you have.
+      </p>
+    </div>
+  </div>
+
+  <template id="row-template">
+    <div class="row-item" data-comp-row>
+      <input
+        type="text"
+        data-c="name"
+        placeholder="e.g. 40% alcohol"
+        aria-label="Component label"
+        autocomplete="off"
+      />
+      <input
+        type="number"
+        step="any"
+        inputmode="decimal"
+        data-c="strength"
+        placeholder="40"
+        aria-label="Strength"
+        autocomplete="off"
+      />
+      <input
+        type="number"
+        step="any"
+        inputmode="decimal"
+        data-c="quantity"
+        placeholder="300"
+        aria-label="Quantity"
+        autocomplete="off"
+      />
+      <button class="row-remove" type="button" data-remove aria-label="Remove component"
+        >&times;</button
+      >
+    </div>
+  </template>
+</CalcPage>
+
+<script>
+  import { setupCalculator, setupModes } from '../../scripts/calc.js';
+  import { solveAlligations } from '../../scripts/solvers/alligations.js';
+
+  const modeInput = document.querySelector('input[name="mode"]');
+  const listEl = document.getElementById('components');
+  const template = document.getElementById('row-template');
+
+  function addRow(values) {
+    const row = template.content.querySelector('.row-item').cloneNode(true);
+
+    if (values) {
+      const [name, strength, quantity] = values;
+      row.querySelector('[data-c="name"]').value = name;
+      row.querySelector('[data-c="strength"]').value = strength;
+      row.querySelector('[data-c="quantity"]').value = quantity;
+    }
+
+    row.querySelector('[data-remove]').addEventListener('click', () => {
+      row.remove();
+      if (!listEl.querySelector('[data-comp-row]')) addRow();
+      listEl.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+
+    listEl.append(row);
+    return row;
+  }
+
+  function readRows() {
+    return Array.from(listEl.querySelectorAll('[data-comp-row]'))
+      .map((row) => ({
+        name: row.querySelector('[data-c="name"]').value.trim(),
+        strength: row.querySelector('[data-c="strength"]').value.trim(),
+        quantity: row.querySelector('[data-c="quantity"]').value.trim(),
+      }))
+      .filter((row) => row.name || row.strength || row.quantity);
+  }
+
+  const calc = setupCalculator({
+    form: '#calc',
+    onPreset(preset) {
+      if (preset.mode) activate(preset.mode);
+    },
+    solve: (v) => {
+      if (v.mode === 'medial') {
+        return solveAlligations({ ...v, rows: readRows() });
+      }
+      return solveAlligations(v);
+    },
+  });
+
+  const activate = setupModes((mode) => {
+    modeInput.value = mode;
+    calc.clear();
+  });
+
+  document.getElementById('add-row').addEventListener('click', () => addRow());
+
+  document.getElementById('clear-medial').addEventListener('click', () => {
+    document.getElementById('calc').reset();
+    modeInput.value = 'medial';
+    listEl.replaceChildren();
+    addRow();
+    addRow();
+    activate('medial');
+    calc.clear();
+  });
+
+  for (const button of document.querySelectorAll('[data-medial-example]')) {
+    button.addEventListener('click', () => {
+      const preset = JSON.parse(button.dataset.medialExample);
+      const form = document.getElementById('calc');
+      activate('medial');
+      form.elements.strengthUnit.value = preset.strengthUnit;
+      form.elements.qtyUnit.value = preset.qtyUnit;
+      listEl.replaceChildren();
+      preset.rows.forEach((row) => addRow(row));
+      calc.run();
+    });
+  }
+
+  addRow();
+  addRow();
+</script>

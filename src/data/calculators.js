@@ -46,6 +46,12 @@ export const calculators = [
     desc: 'Scale a whole compounding formula up or down by yield, and get every ingredient recalculated at once.',
   },
   {
+    href: '/calculators/alligations/',
+    title: 'Alligations',
+    tag: 'Compounding',
+    desc: 'Alligation alternate for mixing two strengths to hit a target, and alligation medial for the average strength of a known mix.',
+  },
+  {
     href: '/calculators/colligative-properties/',
     title: "Colligative properties & Van't Hoff",
     tag: 'Physical pharmacy',

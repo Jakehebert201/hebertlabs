@@ -114,6 +114,24 @@ scaled amount = original × factor</pre>
 
 One unitless factor scales every line of the formula, including vehicle and flavoring, not just the active.
 
+### Alligations
+
+[Open the calculator](/calculators/alligations/)
+
+<pre class="formula">higher ──── parts of higher = desired − lower
+         \  /
+        desired
+         /  \
+lower ──── parts of lower  = higher − desired</pre>
+
+Alligation alternate: the parts of each stock equal the gap between the desired strength and the other stock.
+
+<pre class="formula">        Σ (strength × quantity)
+average = ─────────────────────────
+              Σ quantity</pre>
+
+Alligation medial: the finished strength is the quantity-weighted average of the strengths you mixed.
+
 ## Physical pharmacy
 
 ### Colligative properties & Van't Hoff
