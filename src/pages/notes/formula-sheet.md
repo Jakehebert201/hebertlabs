@@ -132,7 +132,39 @@ average = ───────────────────────�
 
 Alligation medial: the finished strength is the quantity-weighted average of the strengths you mixed.
 
+## Dosing
+
+### BSA and BSA-based dosing
+
+[Open the calculator](/calculators/bsa/)
+
+<pre class="formula">BSA (m²) = √( (height(cm) × weight(kg)) / 3600 )
+
+patient dose (mg)  =  ordered (mg/m²)  ×  BSA (m²)
+
+1 in  =  2.54 cm
+2.2 lb  =  1 kg
+reference adult BSA  ≈  1.73 m²</pre>
+
+Mosteller needs centimeters and kilograms; convert first, then multiply an mg/m² order by the patient's own BSA. 1.73 m² is the conventional adult reference, not a substitute for measuring the patient.
+
 ## Physical pharmacy
+
+### Molarity, molality and osmoles
+
+[Open the calculator](/calculators/molarity-osmolarity/)
+
+<pre class="formula">              per liter of solution     per kg of solvent
+molecules     molarity (M)              molality (m)
+particles     osmolarity (mOsmol/L)     osmolality (mOsmol/kg)
+
+molarity (M)   =  moles ÷ liters of solution
+molality (m)   =  moles ÷ kg of solvent
+
+osmolarity (mOsmol/L)   =  M × i × 1000
+osmolality (mOsmol/kg)  =  m × i × 1000</pre>
+
+Same two choices every time: count molecules or particles, and divide by solution volume or solvent mass.
 
 ### Colligative properties & Van't Hoff
 
@@ -158,6 +190,9 @@ All four properties track particle count; *m* is molality (mol per kg of solvent
 1000 mL = 1 L
 5 mL    = 1 tsp
 1 kg   ≈ 2.2 lb
+1 in    = 2.54 cm
+
+Reference adult BSA ≈ 1.73 m²
 
 Water density ≈ 1 g/mL
 Water Kf      = 1.86 °C·kg/mol
@@ -172,6 +207,9 @@ Blood freezing point  ≈ −0.52 °C
 i = 1   non-electrolyte (dextrose, urea, glycerin)
 i = 2   NaCl, KCl
 i = 3   CaCl₂, Na₂SO₄
-i = 4   sodium citrate</pre>
+i = 4   sodium citrate
+
+U-100 insulin  =  100 units/mL
+U-500 insulin  =  500 units/mL</pre>
 
 These match the defaults the colligative calculator uses. Coursework may round them; if your lecturer quotes a different figure, use theirs.

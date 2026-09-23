@@ -52,9 +52,21 @@ export const calculators = [
     desc: 'Alligation alternate for mixing two strengths to hit a target, and alligation medial for the average strength of a known mix.',
   },
   {
+    href: '/calculators/bsa/',
+    title: 'BSA and BSA-based dosing',
+    tag: 'Dosing',
+    desc: 'Mosteller body surface area from height and weight, with lb→kg and in→cm conversions, then mg/m² orders turned into patient doses against the 1.73 m² adult reference.',
+  },
+  {
     href: '/calculators/colligative-properties/',
     title: "Colligative properties & Van't Hoff",
     tag: 'Physical pharmacy',
     desc: 'Osmolarity, freezing point depression, boiling point elevation and vapor pressure lowering, all driven by the number of particles in solution.',
+  },
+  {
+    href: '/calculators/molarity-osmolarity/',
+    title: 'Molarity, molality and osmoles',
+    tag: 'Physical pharmacy',
+    desc: 'Molarity and osmolarity per liter of solution, molality and osmolality per kg of solvent, plus conversions within each pair using the Van\'t Hoff factor.',
   },
 ];

@@ -1,0 +1,201 @@
+---
+import CalcPage from '../../components/CalcPage.astro';
+import Field from '../../components/Field.astro';
+---
+
+<CalcPage
+  title="BSA and BSA-based dosing"
+  kicker="Dosing"
+  lede="Mosteller turns height and weight into body surface area. Once you have BSA in m², an order written in mg/m² becomes an ordinary multiply, and 1.73 m² is the adult figure those orders are often referenced against."
+  description="Calculate Mosteller body surface area from height and weight, convert lb and inches along the way, and turn mg/m² orders into patient doses using the 1.73 m² adult reference."
+>
+  <form slot="form" id="calc">
+    <input type="hidden" name="mode" value="bsa" />
+
+    <div class="modes" role="group" aria-label="Choose what to solve for">
+      <button class="mode-btn" type="button" data-mode="bsa" aria-pressed="true">
+        Find BSA
+      </button>
+      <button class="mode-btn" type="button" data-mode="dose" aria-pressed="false">
+        Dose from mg/m²
+      </button>
+      <button class="mode-btn" type="button" data-mode="perM2" aria-pressed="false">
+        Find mg/m²
+      </button>
+    </div>
+
+    <fieldset>
+      <legend>Patient size</legend>
+      <div class="field-grid">
+        <Field
+          label="BSA (m²)"
+          name="bsa"
+          placeholder="optional for dosing modes"
+          hint="Used only when finding a dose or mg/m². Leave blank to calculate Mosteller from height and weight. Ignored when you are only finding BSA."
+        />
+      </div>
+      <div class="field-grid">
+        <Field label="Height" name="height" placeholder="70" />
+        <div class="field">
+          <label for="heightUnit">Height unit</label>
+          <select id="heightUnit" name="heightUnit">
+            <option value="in" selected>Inches (in)</option>
+            <option value="cm">Centimeters (cm)</option>
+          </select>
+        </div>
+        <Field label="Weight" name="weight" placeholder="150" />
+        <div class="field">
+          <label for="weightUnit">Weight unit</label>
+          <select id="weightUnit" name="weightUnit">
+            <option value="lb" selected>Pounds (lb)</option>
+            <option value="kg">Kilograms (kg)</option>
+          </select>
+        </div>
+      </div>
+      <p class="hint" style="margin-top:-0.6rem">
+        Conversions used here: 1 in = 2.54 cm, and 2.2 lb = 1 kg. Feet are left
+        out on purpose; convert to inches first if that is what you were given.
+      </p>
+    </fieldset>
+
+    <div data-mode-panel="bsa">
+      <div class="field-actions">
+        <button class="btn btn--primary" type="submit">Find BSA</button>
+        <button class="btn btn--quiet" type="reset">Clear</button>
+      </div>
+      <div class="field-actions" style="margin-top:0.9rem">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"bsa","bsa":"","height":"70","heightUnit":"in","weight":"150","weightUnit":"lb"}'
+        >
+          Example: 70 in, 150 lb
+        </button>
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"bsa","bsa":"","height":"170","heightUnit":"cm","weight":"70","weightUnit":"kg"}'
+        >
+          Example: 170 cm, 70 kg
+        </button>
+      </div>
+    </div>
+
+    <div data-mode-panel="dose" hidden>
+      <fieldset>
+        <legend>The order</legend>
+        <div class="field-grid">
+          <Field
+            label="Ordered dose (mg/m²)"
+            name="ordered"
+            placeholder="75"
+            hint="The protocol dose, written per square meter of BSA."
+          />
+        </div>
+      </fieldset>
+      <div class="field-actions">
+        <button class="btn btn--primary" type="submit">Find the dose</button>
+        <button class="btn btn--quiet" type="reset">Clear</button>
+      </div>
+      <div class="field-actions" style="margin-top:0.9rem">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"dose","ordered":"75","bsa":"1.73","height":"","weight":"","heightUnit":"in","weightUnit":"lb"}'
+        >
+          Example: 75 mg/m² for a 1.73 m² adult
+        </button>
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"dose","ordered":"75","bsa":"","height":"70","heightUnit":"in","weight":"150","weightUnit":"lb"}'
+        >
+          Example: 75 mg/m², 70 in / 150 lb
+        </button>
+      </div>
+    </div>
+
+    <div data-mode-panel="perM2" hidden>
+      <fieldset>
+        <legend>What was given</legend>
+        <div class="field-grid">
+          <Field
+            label="Total dose (mg)"
+            name="totalDose"
+            placeholder="130"
+            hint="The milligram amount the patient actually received, or the amount you are checking against the protocol."
+          />
+        </div>
+      </fieldset>
+      <div class="field-actions">
+        <button class="btn btn--primary" type="submit">Find mg/m²</button>
+        <button class="btn btn--quiet" type="reset">Clear</button>
+      </div>
+      <div class="field-actions" style="margin-top:0.9rem">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"perM2","totalDose":"130","bsa":"1.73","height":"","weight":"","heightUnit":"in","weightUnit":"lb"}'
+        >
+          Example: 130 mg on a 1.73 m² adult
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div slot="concept">
+    <h2>Surface area, not just weight</h2>
+    <p>
+      Some drugs are ordered per square meter of body surface area because that
+      tracks better with how the body clears them than weight alone. The number
+      you need first is BSA in m².
+    </p>
+
+    <h3>Mosteller</h3>
+    <pre class="formula">BSA (m²) = √( (height(cm) × weight(kg)) / 3600 )</pre>
+    <p>
+      Height has to be in centimeters and weight in kilograms before the
+      formula sees them. The conversions this calculator uses on purpose are
+      the same ones the rest of the site teaches:
+    </p>
+    <pre class="formula">1 in  =  2.54 cm
+2.2 lb  =  1 kg</pre>
+
+    <h3>Turning mg/m² into a dose</h3>
+    <pre class="formula">patient dose (mg)  =  ordered (mg/m²)  ×  BSA (m²)</pre>
+    <p>
+      The square meters cancel. What you are left with is a plain milligram
+      amount for that patient.
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>The 1.73 m² reference.</strong> Many adult protocols and
+        textbook examples are written as if the patient has 1.73 m² of surface
+        area. It is a conventional average adult figure, not a measurement of
+        the person in front of you. Use the patient's own BSA for the actual
+        dose; keep 1.73 around as the reference the order was sized against.
+      </p>
+    </div>
+  </div>
+</CalcPage>
+
+<script>
+  import { setupCalculator, setupModes } from '../../scripts/calc.js';
+  import { solveBsa } from '../../scripts/solvers/bsa.js';
+
+  const modeInput = document.querySelector('input[name="mode"]');
+
+  const calc = setupCalculator({
+    form: '#calc',
+    onPreset(preset) {
+      if (preset.mode) activate(preset.mode);
+    },
+    solve: solveBsa,
+  });
+
+  const activate = setupModes((mode) => {
+    modeInput.value = mode;
+    calc.clear();
+  });
+</script>

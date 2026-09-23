@@ -1,0 +1,458 @@
+---
+import CalcPage from '../../components/CalcPage.astro';
+import Field from '../../components/Field.astro';
+---
+
+<CalcPage
+  title="Molarity, molality and osmoles"
+  kicker="Physical pharmacy"
+  lede="Four related concentrations. Molarity and osmolarity are per liter of solution. Molality and osmolality are per kilogram of solvent. In each pair, the osmole version just multiplies by the Van't Hoff factor to count particles instead of molecules."
+  description="Calculate molarity, molality, osmolarity and osmolality from mass and molecular weight, and convert either direction within each pair using the Van't Hoff factor."
+>
+  <form slot="form" id="calc">
+    <input type="hidden" name="mode" value="molarity" />
+
+    <div class="modes" role="group" aria-label="Choose what to solve for">
+      <button class="mode-btn" type="button" data-mode="molarity" aria-pressed="true">
+        Molarity
+      </button>
+      <button class="mode-btn" type="button" data-mode="osmolarity" aria-pressed="false">
+        Osmolarity
+      </button>
+      <button class="mode-btn" type="button" data-mode="molality" aria-pressed="false">
+        Molality
+      </button>
+      <button class="mode-btn" type="button" data-mode="osmolality" aria-pressed="false">
+        Osmolality
+      </button>
+      <button class="mode-btn" type="button" data-mode="convert" aria-pressed="false">
+        Convert
+      </button>
+    </div>
+
+    <div data-mode-panel="molarity">
+      <fieldset>
+        <legend>Per liter of solution</legend>
+        <div class="field-grid">
+          <Field label="Mass of solute (g)" name="mass" placeholder="9" />
+          <Field label="Molecular weight (g/mol)" name="mw" placeholder="58.44" />
+          <Field label="Final volume (mL)" name="volume" placeholder="1000" />
+        </div>
+      </fieldset>
+
+      <div class="field-actions">
+        <button class="btn btn--primary" type="submit">Find molarity</button>
+        <button class="btn btn--quiet" type="reset">Clear</button>
+      </div>
+      <div class="field-actions" style="margin-top:0.9rem">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"molarity","mass":"9","mw":"58.44","volume":"1000"}'
+        >
+          Example: 0.9% NaCl as molarity
+        </button>
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"molarity","mass":"50","mw":"198.17","volume":"1000"}'
+        >
+          Example: 5% dextrose (monohydrate)
+        </button>
+      </div>
+    </div>
+
+    <div data-mode-panel="osmolarity" hidden>
+      <fieldset>
+        <legend>Per liter of solution</legend>
+        <div class="field-grid">
+          <Field label="Mass of solute (g)" name="massOsm" placeholder="9" />
+          <Field label="Molecular weight (g/mol)" name="mwOsm" placeholder="58.44" />
+          <Field label="Final volume (mL)" name="volumeOsm" placeholder="1000" />
+        </div>
+        <div class="field-grid">
+          <div class="field">
+            <label for="iPresetOsm">How does it dissociate?</label>
+            <select id="iPresetOsm" name="iPresetOsm">
+              <option value="1">Non-electrolyte — dextrose, urea, glycerin (i = 1)</option>
+              <option value="2" selected>Two ions — NaCl, KCl (i = 2)</option>
+              <option value="3">Three ions — CaCl₂, Na₂SO₄, atropine sulfate (i = 3)</option>
+              <option value="4">Four ions — sodium citrate (i = 4)</option>
+              <option value="5">Five ions (i = 5)</option>
+              <option value="custom">Something else — I'll type it</option>
+            </select>
+          </div>
+          <Field
+            label="Van't Hoff factor (i)"
+            name="iOsm"
+            value="2"
+            hint="Particles released per molecule when the compound dissolves."
+          />
+        </div>
+      </fieldset>
+
+      <div class="field-actions">
+        <button class="btn btn--primary" type="submit">Find osmolarity</button>
+        <button class="btn btn--quiet" type="button" data-clear-panel>Clear</button>
+      </div>
+      <div class="field-actions" style="margin-top:0.9rem">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"osmolarity","massOsm":"9","mwOsm":"58.44","volumeOsm":"1000","iOsm":"2"}'
+        >
+          Example: 0.9% sodium chloride
+        </button>
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"osmolarity","massOsm":"50","mwOsm":"198.17","volumeOsm":"1000","iOsm":"1"}'
+        >
+          Example: 5% dextrose (monohydrate)
+        </button>
+      </div>
+    </div>
+
+    <div data-mode-panel="molality" hidden>
+      <fieldset>
+        <legend>Per kilogram of solvent</legend>
+        <div class="field-grid">
+          <Field label="Mass of solute (g)" name="massMol" placeholder="0.9" />
+          <Field label="Molecular weight (g/mol)" name="mwMol" placeholder="58.44" />
+          <Field
+            label="Mass of solvent (g)"
+            name="solventMol"
+            placeholder="100"
+            hint="Solvent only — not the finished solution."
+          />
+        </div>
+      </fieldset>
+
+      <div class="field-actions">
+        <button class="btn btn--primary" type="submit">Find molality</button>
+        <button class="btn btn--quiet" type="button" data-clear-panel>Clear</button>
+      </div>
+      <div class="field-actions" style="margin-top:0.9rem">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"molality","massMol":"0.9","mwMol":"58.44","solventMol":"100"}'
+        >
+          Example: 0.9 g NaCl in 100 g water
+        </button>
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"molality","massMol":"5","mwMol":"198.17","solventMol":"100"}'
+        >
+          Example: 5 g dextrose in 100 g water
+        </button>
+      </div>
+    </div>
+
+    <div data-mode-panel="osmolality" hidden>
+      <fieldset>
+        <legend>Per kilogram of solvent</legend>
+        <div class="field-grid">
+          <Field label="Mass of solute (g)" name="massOsmol" placeholder="0.9" />
+          <Field label="Molecular weight (g/mol)" name="mwOsmol" placeholder="58.44" />
+          <Field
+            label="Mass of solvent (g)"
+            name="solventOsmol"
+            placeholder="100"
+            hint="Solvent only — not the finished solution."
+          />
+        </div>
+        <div class="field-grid">
+          <div class="field">
+            <label for="iPresetOsmol">How does it dissociate?</label>
+            <select id="iPresetOsmol" name="iPresetOsmol">
+              <option value="1">Non-electrolyte — dextrose, urea, glycerin (i = 1)</option>
+              <option value="2" selected>Two ions — NaCl, KCl (i = 2)</option>
+              <option value="3">Three ions — CaCl₂, Na₂SO₄, atropine sulfate (i = 3)</option>
+              <option value="4">Four ions — sodium citrate (i = 4)</option>
+              <option value="5">Five ions (i = 5)</option>
+              <option value="custom">Something else — I'll type it</option>
+            </select>
+          </div>
+          <Field
+            label="Van't Hoff factor (i)"
+            name="iOsmol"
+            value="2"
+            hint="Particles released per molecule when the compound dissolves."
+          />
+        </div>
+      </fieldset>
+
+      <div class="field-actions">
+        <button class="btn btn--primary" type="submit">Find osmolality</button>
+        <button class="btn btn--quiet" type="button" data-clear-panel>Clear</button>
+      </div>
+      <div class="field-actions" style="margin-top:0.9rem">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"osmolality","massOsmol":"0.9","mwOsmol":"58.44","solventOsmol":"100","iOsmol":"2"}'
+        >
+          Example: 0.9 g NaCl in 100 g water
+        </button>
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"osmolality","massOsmol":"5","mwOsmol":"198.17","solventOsmol":"100","iOsmol":"1"}'
+        >
+          Example: 5 g dextrose in 100 g water
+        </button>
+      </div>
+    </div>
+
+    <div data-mode-panel="convert" hidden>
+      <fieldset>
+        <legend>Which pair?</legend>
+        <div class="field-grid">
+          <div class="field field--wide">
+            <label for="convertBasis">Conversion basis</label>
+            <select id="convertBasis" name="convertBasis">
+              <option value="liter" selected>Per liter of solution (M ↔ mOsmol/L)</option>
+              <option value="kg">Per kg of solvent (m ↔ mOsmol/kg)</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset data-convert-liter>
+        <legend>Fill one, leave the other blank</legend>
+        <div class="field-grid">
+          <Field label="Molarity (M)" name="molarity" placeholder="0.154" />
+          <Field label="Osmolarity (mOsmol/L)" name="osmolarity" placeholder="leave blank" />
+        </div>
+      </fieldset>
+
+      <fieldset data-convert-kg hidden>
+        <legend>Fill one, leave the other blank</legend>
+        <div class="field-grid">
+          <Field label="Molality (mol/kg)" name="molality" placeholder="0.154" />
+          <Field label="Osmolality (mOsmol/kg)" name="osmolality" placeholder="leave blank" />
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Dissociation</legend>
+        <div class="field-grid">
+          <div class="field">
+            <label for="iPresetConvert">How does it dissociate?</label>
+            <select id="iPresetConvert" name="iPresetConvert">
+              <option value="1">Non-electrolyte — dextrose, urea, glycerin (i = 1)</option>
+              <option value="2" selected>Two ions — NaCl, KCl (i = 2)</option>
+              <option value="3">Three ions — CaCl₂, Na₂SO₄, atropine sulfate (i = 3)</option>
+              <option value="4">Four ions — sodium citrate (i = 4)</option>
+              <option value="5">Five ions (i = 5)</option>
+              <option value="custom">Something else — I'll type it</option>
+            </select>
+          </div>
+          <Field
+            label="Van't Hoff factor (i)"
+            name="iConvert"
+            value="2"
+            hint="Needed in both directions."
+          />
+        </div>
+      </fieldset>
+
+      <div class="field-actions">
+        <button class="btn btn--primary" type="submit">Convert</button>
+        <button class="btn btn--quiet" type="button" data-clear-panel>Clear</button>
+      </div>
+      <div class="field-actions" style="margin-top:0.9rem">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"convert","convertBasis":"liter","molarity":"0.154","osmolarity":"","molality":"","osmolality":"","iConvert":"2"}'
+        >
+          Example: 0.154 M → mOsmol/L
+        </button>
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"convert","convertBasis":"kg","molarity":"","osmolarity":"","molality":"0.154","osmolality":"","iConvert":"2"}'
+        >
+          Example: 0.154 mol/kg → mOsmol/kg
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div slot="concept">
+    <h2>Four names, two ideas</h2>
+    <p>
+      Every concentration here is built from the same two choices: what you are
+      counting, and what you are dividing by.
+    </p>
+
+    <pre class="formula">              per liter of solution     per kg of solvent
+molecules     molarity (M)              molality (m)
+particles     osmolarity (mOsmol/L)     osmolality (mOsmol/kg)</pre>
+
+    <h3>Per liter versus per kilogram</h3>
+    <pre class="formula">molarity (M)   =  moles of compound  ÷  liters of solution
+molality (m)   =  moles of compound  ÷  kg of solvent</pre>
+    <p>
+      Molarity cares about the finished volume. Molality cares only about how
+      much solvent you started with. For dilute aqueous fluids the numbers are
+      close; they drift apart as the solution gets more concentrated, because
+      the solute itself starts to take up volume.
+    </p>
+
+    <h3>Molecules versus particles</h3>
+    <pre class="formula">osmolarity (mOsmol/L)   =  M × i × 1000
+osmolality (mOsmol/kg)  =  m × i × 1000</pre>
+    <p>
+      The Van't Hoff factor <strong>i</strong> is the particle multiplier.
+      Non-electrolytes stay at 1. NaCl is treated as 2 in this course. The
+      ×1000 converts Osmol into the milliosmole units used on labels and lab
+      reports.
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>Which one does freezing point use?</strong> Colligative
+        properties (freezing point, boiling point) run on
+        <em>molality</em> and <em>osmolality</em>, because those stay tied to
+        the solvent even when the volume shifts. IV bag tonicity labels are
+        usually <em>osmolarity</em>.
+      </p>
+    </div>
+  </div>
+</CalcPage>
+
+<script>
+  import { setupCalculator, setupModes } from '../../scripts/calc.js';
+  import { solveMolarityOsmolarity } from '../../scripts/solvers/molarity-osmolarity.js';
+
+  const modeInput = document.querySelector('input[name="mode"]');
+  const convertBasis = document.getElementById('convertBasis');
+  const convertLiter = document.querySelector('[data-convert-liter]');
+  const convertKg = document.querySelector('[data-convert-kg]');
+
+  function syncConvertBasis() {
+    const kg = convertBasis.value === 'kg';
+    if (convertLiter) convertLiter.hidden = kg;
+    if (convertKg) convertKg.hidden = !kg;
+  }
+
+  convertBasis.addEventListener('change', () => {
+    syncConvertBasis();
+    calc.clear();
+  });
+  syncConvertBasis();
+
+  function wireIPreset(presetId, fieldName) {
+    const preset = document.getElementById(presetId);
+    const field = document.querySelector(`input[name="${fieldName}"]`);
+    if (!preset || !field) return () => {};
+
+    function matchPresetToField() {
+      const match = Array.from(preset.options).find((o) => o.value === field.value);
+      preset.value = match ? match.value : 'custom';
+    }
+
+    preset.addEventListener('change', () => {
+      if (preset.value !== 'custom') field.value = preset.value;
+    });
+    field.addEventListener('change', matchPresetToField);
+    return matchPresetToField;
+  }
+
+  const matchOsm = wireIPreset('iPresetOsm', 'iOsm');
+  const matchOsmol = wireIPreset('iPresetOsmol', 'iOsmol');
+  const matchConvert = wireIPreset('iPresetConvert', 'iConvert');
+
+  const calc = setupCalculator({
+    form: '#calc',
+    onPreset(preset) {
+      if (preset.mode) activate(preset.mode);
+      if (preset.convertBasis) {
+        convertBasis.value = preset.convertBasis;
+        syncConvertBasis();
+      }
+      if (preset.iOsm !== undefined) matchOsm();
+      if (preset.iOsmol !== undefined) matchOsmol();
+      if (preset.iConvert !== undefined) matchConvert();
+    },
+    solve: (v) => {
+      if (v.mode === 'osmolarity') {
+        return solveMolarityOsmolarity({
+          mode: 'osmolarity',
+          mass: v.massOsm,
+          mw: v.mwOsm,
+          volume: v.volumeOsm,
+          i: v.iOsm,
+        });
+      }
+      if (v.mode === 'molality') {
+        return solveMolarityOsmolarity({
+          mode: 'molality',
+          mass: v.massMol,
+          mw: v.mwMol,
+          solventMass: v.solventMol,
+        });
+      }
+      if (v.mode === 'osmolality') {
+        return solveMolarityOsmolarity({
+          mode: 'osmolality',
+          mass: v.massOsmol,
+          mw: v.mwOsmol,
+          solventMass: v.solventOsmol,
+          i: v.iOsmol,
+        });
+      }
+      if (v.mode === 'convert') {
+        return solveMolarityOsmolarity({
+          mode: 'convert',
+          convertBasis: v.convertBasis,
+          molarity: v.molarity,
+          osmolarity: v.osmolarity,
+          molality: v.molality,
+          osmolality: v.osmolality,
+          i: v.iConvert,
+        });
+      }
+      return solveMolarityOsmolarity({
+        mode: 'molarity',
+        mass: v.mass,
+        mw: v.mw,
+        volume: v.volume,
+      });
+    },
+  });
+
+  const activate = setupModes((mode) => {
+    modeInput.value = mode;
+    calc.clear();
+  });
+
+  for (const button of document.querySelectorAll('[data-clear-panel]')) {
+    button.addEventListener('click', () => {
+      const panel = button.closest('[data-mode-panel]');
+      if (!panel) return;
+      for (const el of panel.querySelectorAll('input, select')) {
+        if (el.name === 'mode') continue;
+        if (el.tagName === 'SELECT') {
+          if (el.name === 'convertBasis') {
+            el.value = 'liter';
+            syncConvertBasis();
+            continue;
+          }
+          if (el.name.startsWith('iPreset')) el.value = '2';
+          continue;
+        }
+        if (el.name === 'iOsm' || el.name === 'iOsmol' || el.name === 'iConvert') {
+          el.value = '2';
+          continue;
+        }
+        el.value = '';
+      }
+      calc.clear();
+    });
+  }
+</script>
