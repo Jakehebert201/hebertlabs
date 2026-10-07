@@ -14,11 +14,13 @@ These are the relationships the calculators use. Each block is the equation plus
 
 [Open the calculator](/calculators/proportions/)
 
-<pre class="formula">  a       c
+```
+  a       c
  ───  =  ───
   b       d
 
-a × d  =  b × c</pre>
+a × d  =  b × c
+```
 
 Two equal ratios stay equal as they scale; cross-multiply and divide by whatever sits with the unknown.
 
@@ -26,15 +28,19 @@ Two equal ratios stay equal as they scale; cross-multiply and divide by whatever
 
 [Open the calculator](/calculators/dimensional-analysis/)
 
-<pre class="formula">1000 mg
+```
+1000 mg
 ─────── = 1
-  1 g</pre>
+  1 g
+```
 
 A conversion factor is an equality written as a fraction that equals 1, so multiplying by it only changes units.
 
-<pre class="formula">           1 kg       2 mg
+```
+           1 kg       2 mg
 150 lb ×  ──────  ×  ──────  =  136 mg
-          2.2 lb      1 kg</pre>
+          2.2 lb      1 kg
+```
 
 Put the unit you want to cancel on the bottom of the next factor; whatever unit survives is the answer's unit.
 
@@ -44,19 +50,25 @@ Put the unit you want to cancel on the bottom of the next factor; whatever unit 
 
 [Open the calculator](/calculators/percentage-strength/)
 
-| Type | Meaning |
-| --- | --- |
-| % w/v | grams of ingredient in 100 mL of preparation |
-| % w/w | grams of ingredient in 100 g of preparation |
-| % v/v | mL of ingredient in 100 mL of preparation |
 
-<pre class="formula">  5 g
+| Type  | Meaning                                      |
+| ----- | -------------------------------------------- |
+| % w/v | grams of ingredient in 100 mL of preparation |
+| % w/w | grams of ingredient in 100 g of preparation  |
+| % v/v | mL of ingredient in 100 mL of preparation    |
+
+
+```
+  5 g
 ────────     ← 5% w/v as a factor
- 100 mL</pre>
+ 100 mL
+```
 
 Read the percentage as a conversion factor, then orient it so the unit you do not want cancels.
 
-<pre class="formula">% w/v × 10  =  mg/mL</pre>
+```
+% w/v × 10  =  mg/mL
+```
 
 The shortcut worth keeping: 0.9% w/v is 9 mg/mL, and 5% w/v is 50 mg/mL.
 
@@ -64,12 +76,16 @@ The shortcut worth keeping: 0.9% w/v is 9 mg/mL, and 5% w/v is 50 mg/mL.
 
 [Open the calculator](/calculators/ratio-strength/)
 
-<pre class="formula">1 ppm  =  1 mg/L  =  1 mcg/mL
-1 ppb  =  1 mcg/L  =  1 ng/mL</pre>
+```
+1 ppm  =  1 mg/L  =  1 mcg/mL
+1 ppb  =  1 mcg/L  =  1 ng/mL
+```
 
 For dilute aqueous solutions, ppm and ppb are just mass-per-volume labels, not a separate kind of math.
 
-<pre class="formula">1 : X     →     X is the volume (or mass) that holds 1 part of ingredient</pre>
+```
+1 : X     →     X is the volume (or mass) that holds 1 part of ingredient
+```
 
 Bigger X means a weaker preparation. On solids, 1 ppm is also 1 mg/kg.
 
@@ -77,9 +93,11 @@ Bigger X means a weaker preparation. On solids, 1 ppm is also 1 mg/kg.
 
 [Open the calculator](/calculators/concentration-dilution/)
 
-<pre class="formula">M1 × V1  =  M2 × V2
+```
+M1 × V1  =  M2 × V2
 
-diluent  =  V2 − V1</pre>
+diluent  =  V2 − V1
+```
 
 The amount of drug does not change when you only add diluent, so strength × volume stays constant; the exam usually wants the diluent, not V2.
 
@@ -89,14 +107,16 @@ Ratio strengths are the exception: convert `1 : X` to a concentration with `1/X`
 
 [Open the calculator](/calculators/specific-gravity/)
 
-<pre class="formula">           density of the substance
+```
+           density of the substance
    sg  =  ─────────────────────────
              density of water
 
    sg  =  mass in grams  ÷  volume in milliliters
 
 mass = sg × volume
-volume = mass ÷ sg</pre>
+volume = mass ÷ sg
+```
 
 Because water is about 1 g/mL, specific gravity is numerically the same as density in g/mL and has no units of its own.
 
@@ -106,86 +126,94 @@ Because water is about 1 g/mL, specific gravity is numerically the same as densi
 
 [Open the calculator](/calculators/reduce-enlarge/)
 
-<pre class="formula">              quantity you want to make
+```
+              quantity you want to make
    factor  =  ──────────────────────────
               quantity the formula makes
 
-scaled amount = original × factor</pre>
+scaled amount = original × factor
+```
 
 One unitless factor scales every line of the formula, including vehicle and flavoring, not just the active.
+
+## Exam 2
 
 ### Alligations
 
 [Open the calculator](/calculators/alligations/)
 
-<pre class="formula">higher ──── parts of higher = desired − lower
+```
+higher ──── parts of higher = desired − lower
          \  /
         desired
          /  \
-lower ──── parts of lower  = higher − desired</pre>
+lower ──── parts of lower  = higher − desired
+```
 
 Alligation alternate: the parts of each stock equal the gap between the desired strength and the other stock.
 
-<pre class="formula">        Σ (strength × quantity)
+```
+        Σ (strength × quantity)
 average = ─────────────────────────
-              Σ quantity</pre>
+              Σ quantity
+```
 
 Alligation medial: the finished strength is the quantity-weighted average of the strengths you mixed.
-
-## Dosing
 
 ### BSA and BSA-based dosing
 
 [Open the calculator](/calculators/bsa/)
 
-<pre class="formula">BSA (m²) = √( (height(cm) × weight(kg)) / 3600 )
+```
+BSA (m²) = √( (height(cm) × weight(kg)) / 3600 )
 
 patient dose (mg)  =  ordered (mg/m²)  ×  BSA (m²)
 
 1 in  =  2.54 cm
 2.2 lb  =  1 kg
-reference adult BSA  ≈  1.73 m²</pre>
+reference adult BSA  ≈  1.73 m²
+```
 
 Mosteller needs centimeters and kilograms; convert first, then multiply an mg/m² order by the patient's own BSA. 1.73 m² is the conventional adult reference, not a substitute for measuring the patient.
 
-## Physical pharmacy
+### Creatinine clearance
 
-### Molarity, molality and osmoles
+[Open the calculator](/calculators/creatinine-clearance/)
 
-[Open the calculator](/calculators/molarity-osmolarity/)
+```
+CrCl (mL/min) = [(140 - age) × weight(kg) × sex] / (72 × Scr)
 
-<pre class="formula">              per liter of solution     per kg of solvent
-molecules     molarity (M)              molality (m)
-particles     osmolarity (mOsmol/L)     osmolality (mOsmol/kg)
+sex = 1 (male) or 0.85 (female)
+Scr in mg/dL
 
-molarity (M)   =  moles ÷ liters of solution
-molality (m)   =  moles ÷ kg of solvent
+IBW (male)   = 50 kg + 2.3 kg × (height(in) - 60)
+IBW (female) = 45.5 kg + 2.3 kg × (height(in) - 60)
 
-osmolarity (mOsmol/L)   =  M × i × 1000
-osmolality (mOsmol/kg)  =  m × i × 1000</pre>
+dosing weight = min(ABW, IBW)
+```
 
-Same two choices every time: count molecules or particles, and divide by solution volume or solvent mass.
+Cockcroft-Gault estimates clearance for renal dosing tables. This course uses the lower of actual body weight and Devine ideal body weight.
 
-### Colligative properties & Van't Hoff
+### Isotonicity and E values
 
-[Open the calculator](/calculators/colligative-properties/)
+[Open the calculator](/calculators/isotonicity/)
 
-<pre class="formula">        particles actually in solution
-   i =  ──────────────────────────────
-        molecules originally dissolved</pre>
+```
+E = grams of NaCl with the same osmotic effect as 1 g of solute
 
-The Van't Hoff factor counts how many particles each formula unit produces once it is dissolved.
+NaCl equivalent = mass (g) × E
 
-<pre class="formula">osmolarity  =  (g/L ÷ MW) × i × 1000   mOsmol/L
-       ΔTf  =  Kf × m × i                 freezing drops
-       ΔTb  =  Kb × m × i                 boiling rises
-        ΔP  =  X(solute) × P°             vapor pressure drops</pre>
+isotonic NaCl target = 0.9 × (volume / 100)   g   for volume in mL
 
-All four properties track particle count; *m* is molality (mol per kg of solvent), not molarity.
+NaCl to add = isotonic NaCl target − Σ (mass × E)
+```
+
+0.9% w/v sodium chloride is the isotonic reference. Include every dissolved solid; NaCl already in the formula uses E = 1.0. A negative result means the preparation is hypertonic.
 
 ## Constants worth keeping nearby
 
-<pre class="formula">1000 mg = 1 g
+```
+1000 mg = 1 g
 1000 g  = 1 kg
 1000 mL = 1 L
 5 mL    = 1 tsp
@@ -193,23 +221,9 @@ All four properties track particle count; *m* is molality (mol per kg of solvent
 1 in    = 2.54 cm
 
 Reference adult BSA ≈ 1.73 m²
-
 Water density ≈ 1 g/mL
-Water Kf      = 1.86 °C·kg/mol
-Water Kb      = 0.512 °C·kg/mol
-Water MW      = 18.02 g/mol
-Water P°      ≈ 23.8 mmHg at 25 °C
-
-NaCl MW               = 58.44 g/mol
-Dextrose monohydrate  = 198.17 g/mol
-Blood freezing point  ≈ −0.52 °C
-
-i = 1   non-electrolyte (dextrose, urea, glycerin)
-i = 2   NaCl, KCl
-i = 3   CaCl₂, Na₂SO₄
-i = 4   sodium citrate
 
 U-100 insulin  =  100 units/mL
-U-500 insulin  =  500 units/mL</pre>
+U-500 insulin  =  500 units/mL
+```
 
-These match the defaults the colligative calculator uses. Coursework may round them; if your lecturer quotes a different figure, use theirs.

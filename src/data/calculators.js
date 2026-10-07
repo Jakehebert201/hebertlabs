@@ -58,6 +58,12 @@ export const calculators = [
     desc: 'Mosteller body surface area from height and weight, with lb→kg and in→cm conversions, then mg/m² orders turned into patient doses against the 1.73 m² adult reference.',
   },
   {
+    href: '/calculators/creatinine-clearance/',
+    title: 'Creatinine clearance',
+    tag: 'Dosing',
+    desc: 'Cockcroft-Gault CrCl from age, sex, height, weight and serum creatinine, using the lower of actual body weight and Devine ideal body weight.',
+  },
+  {
     href: '/calculators/colligative-properties/',
     title: "Colligative properties & Van't Hoff",
     tag: 'Physical pharmacy',
@@ -68,5 +74,11 @@ export const calculators = [
     title: 'Molarity, molality and osmoles',
     tag: 'Physical pharmacy',
     desc: 'Molarity and osmolarity per liter of solution, molality and osmolality per kg of solvent, plus conversions within each pair using the Van\'t Hoff factor.',
+  },
+  {
+    href: '/calculators/isotonicity/',
+    title: 'Isotonicity and E values',
+    tag: 'Physical pharmacy',
+    desc: 'Sodium chloride equivalents from E values, then how much NaCl to add so a multi-ingredient formula reaches the 0.9% isotonic reference.',
   },
 ];
