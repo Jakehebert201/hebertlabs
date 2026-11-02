@@ -58,10 +58,17 @@ export const calculators = [
     desc: 'Mosteller body surface area from height and weight, with lb→kg and in→cm conversions, then mg/m² orders turned into patient doses against the 1.73 m² adult reference.',
   },
   {
+<<<<<<< HEAD
     href: '/calculators/moles-osmoles-equivalents/',
     title: 'Moles, milliosmoles & milliequivalents',
     tag: 'Dosing',
     desc: 'Convert weight, mol, mmol, mOsm and mEq in either direction using molecular weight, particle count and ionic valency, with compound presets and every step shown.',
+=======
+    href: '/calculators/creatinine-clearance/',
+    title: 'Creatinine clearance',
+    tag: 'Dosing',
+    desc: 'Cockcroft-Gault CrCl from age, sex, height, weight and serum creatinine, using the lower of actual body weight and Devine ideal body weight.',
+>>>>>>> 4bad32a8cfa4eda00aab8f754813a0cb06857cfe
   },
   {
     href: '/calculators/colligative-properties/',
@@ -69,4 +76,19 @@ export const calculators = [
     tag: 'Physical pharmacy',
     desc: 'Osmolarity, freezing point depression, boiling point elevation and vapor pressure lowering, all driven by the number of particles in solution.',
   },
+<<<<<<< HEAD
+=======
+  {
+    href: '/calculators/molarity-osmolarity/',
+    title: 'Molarity, molality and osmoles',
+    tag: 'Physical pharmacy',
+    desc: 'Molarity and osmolarity per liter of solution, molality and osmolality per kg of solvent, plus conversions within each pair using the Van\'t Hoff factor.',
+  },
+  {
+    href: '/calculators/isotonicity/',
+    title: 'Isotonicity and E values',
+    tag: 'Physical pharmacy',
+    desc: 'Sodium chloride equivalents from E values, then how much NaCl to add so a multi-ingredient formula reaches the 0.9% isotonic reference.',
+  },
+>>>>>>> 4bad32a8cfa4eda00aab8f754813a0cb06857cfe
 ];

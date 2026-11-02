@@ -1,0 +1,166 @@
+---
+import CalcPage from '../../components/CalcPage.astro';
+import Field from '../../components/Field.astro';
+---
+
+<CalcPage
+  title="Creatinine clearance"
+  kicker="Dosing"
+  lede="Cockcroft-Gault estimates creatinine clearance from age, sex, weight and serum creatinine. The answer is in mL/min, the same units renal dosing tables use when they say “if CrCl is below…”."
+  description="Estimate Cockcroft-Gault creatinine clearance from age, sex, serum creatinine, height and weight. Dosing weight is the lower of actual body weight and Devine ideal body weight."
+>
+  <form slot="form" id="calc">
+    <fieldset>
+      <legend>Patient</legend>
+      <div class="field-grid">
+        <Field label="Age (years)" name="age" placeholder="70" />
+        <div class="field">
+          <label for="sex">Sex</label>
+          <select id="sex" name="sex">
+            <option value="male" selected>Male</option>
+            <option value="female">Female</option>
+          </select>
+          <span class="hint">Female multiplies the numerator by 0.85.</span>
+        </div>
+        <Field
+          label="Serum creatinine (mg/dL)"
+          name="scr"
+          placeholder="1.2"
+          hint="US coursework uses mg/dL. If you were given µmol/L, convert first."
+        />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Size</legend>
+      <div class="field-grid">
+        <Field label="Weight" name="weight" placeholder="70" />
+        <div class="field">
+          <label for="weightUnit">Weight unit</label>
+          <select id="weightUnit" name="weightUnit">
+            <option value="kg" selected>Kilograms (kg)</option>
+            <option value="lb">Pounds (lb)</option>
+          </select>
+        </div>
+        <Field
+          label="Height"
+          name="height"
+          placeholder="70"
+          hint="Needed for Devine IBW so it can be compared with actual weight."
+        />
+        <div class="field">
+          <label for="heightUnit">Height unit</label>
+          <select id="heightUnit" name="heightUnit">
+            <option value="in" selected>Inches (in)</option>
+            <option value="cm">Centimeters (cm)</option>
+          </select>
+        </div>
+      </div>
+      <p class="hint" style="margin-top:-0.6rem">
+        Conversions used here: 2.2 lb = 1 kg, and 1 in = 2.54 cm. Feet are left
+        out on purpose; convert to inches first if that is what you were given.
+        Dosing weight is whichever is lower: actual body weight or ideal body
+        weight.
+      </p>
+    </fieldset>
+
+    <div class="field-actions">
+      <button class="btn btn--primary" type="submit">Find CrCl</button>
+      <button class="btn btn--quiet" type="reset">Clear</button>
+    </div>
+    <div class="field-actions" style="margin-top:0.9rem">
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"age":"70","sex":"male","scr":"1.2","weight":"70","weightUnit":"kg","height":"70","heightUnit":"in"}'
+      >
+        Example: 70 yr male, 70 kg, 70 in, Scr 1.2
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"age":"65","sex":"female","scr":"1.0","weight":"130","weightUnit":"lb","height":"64","heightUnit":"in"}'
+      >
+        Example: 65 yr female, 130 lb, 64 in, Scr 1.0
+      </button>
+      <button
+        class="btn btn--quiet btn--tiny"
+        type="button"
+        data-example='{"age":"55","sex":"male","scr":"1.1","weight":"90","weightUnit":"kg","height":"70","heightUnit":"in"}'
+      >
+        Example: 55 yr male, 90 kg, 5&apos;10&quot;, Scr 1.1
+      </button>
+    </div>
+
+    <!--
+    Adjusted body weight mode (not used this course):
+    <div class="modes" role="group" aria-label="Choose which weight to use">
+      <button class="mode-btn" type="button" data-mode="adj" aria-pressed="false">
+        Adjusted body weight
+      </button>
+    </div>
+    <div data-mode-panel="adj" hidden>
+      <button class="btn btn--primary" type="submit">Find CrCl with AdjBW</button>
+    </div>
+    -->
+  </form>
+
+  <div slot="concept">
+    <h2>Kidney function for dosing math</h2>
+    <p>
+      Many drug references still dose from estimated creatinine clearance in
+      mL/min. Cockcroft-Gault is the equation pharmacy courses lean on for that
+      estimate. It is not the same thing as eGFR from a lab report.
+    </p>
+
+    <h3>Cockcroft-Gault</h3>
+    <pre class="formula">CrCl (mL/min) = [(140 - age) × weight(kg) × sex] / (72 × Scr)
+
+sex = 1 (male) or 0.85 (female)
+Scr in mg/dL</pre>
+    <p>
+      Age is in years. Weight has to be in kilograms before it enters the
+      formula. Serum creatinine is the concentration in mg/dL that exams in the
+      US usually quote.
+    </p>
+
+    <h3>Which weight?</h3>
+    <p>
+      This course compares actual body weight with Devine ideal body weight and
+      uses the lower of the two in Cockcroft-Gault.
+    </p>
+    <pre class="formula">ABW   = the patient's actual body weight
+IBW   = Devine ideal body weight
+dosing weight = min(ABW, IBW)</pre>
+    <pre class="formula">IBW (male)   = 50 kg + 2.3 kg × (height(in) - 60)
+IBW (female) = 45.5 kg + 2.3 kg × (height(in) - 60)</pre>
+    <!--
+    AdjBW = IBW + 0.4 × (ABW - IBW)
+    Not required for this course.
+    -->
+    <p>
+      If the patient weighs less than ideal, actual weight wins. If they weigh
+      more than ideal, ideal weight wins. Either way, the calculator shows both
+      numbers before it picks.
+    </p>
+
+    <div class="callout">
+      <p>
+        <strong>Study aid, not a chart order.</strong> Cockcroft-Gault and
+        weight-selection rules vary by lecturer and by drug monograph. This
+        tool follows the course rule of using the lower of ABW and IBW, and
+        shows the algebra with your numbers substituted in.
+      </p>
+    </div>
+  </div>
+</CalcPage>
+
+<script>
+  import { setupCalculator } from '../../scripts/calc.js';
+  import { solveCreatinineClearance } from '../../scripts/solvers/creatinine-clearance.js';
+
+  setupCalculator({
+    form: '#calc',
+    solve: solveCreatinineClearance,
+  });
+</script>

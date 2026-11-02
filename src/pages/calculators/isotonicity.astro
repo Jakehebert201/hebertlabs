@@ -1,0 +1,318 @@
+---
+import CalcPage from '../../components/CalcPage.astro';
+import Field from '../../components/Field.astro';
+import { E_PRESETS } from '../../scripts/solvers/isotonicity.js';
+
+const presetOptions = E_PRESETS.filter((item) => item.id !== 'custom');
+---
+
+<CalcPage
+  title="Isotonicity and E values"
+  kicker="Physical pharmacy"
+  lede="The E value tells you how many grams of sodium chloride match the osmotic effect of one gram of a solute. Stack those equivalents against the 0.9% isotonic reference to see what a formula still needs."
+  description="Calculate sodium chloride equivalents from E values, and find how much NaCl to add so a multi-ingredient ophthalmic or parenteral formula is isotonic."
+>
+  <form slot="form" id="calc">
+    <input type="hidden" name="mode" value="equivalent" />
+
+    <div class="modes" role="group" aria-label="Choose what to calculate">
+      <button class="mode-btn" type="button" data-mode="equivalent" aria-pressed="true">
+        NaCl equivalent
+      </button>
+      <button class="mode-btn" type="button" data-mode="recipe" aria-pressed="false">
+        Isotonic adjustment
+      </button>
+    </div>
+
+    <div data-mode-panel="equivalent">
+      <fieldset>
+        <legend>One solute</legend>
+        <div class="field-grid">
+          <Field label="Mass of solute (g)" name="mass" placeholder="0.5" />
+          <div class="field">
+            <label for="ePreset">Common E values</label>
+            <select id="ePreset" name="ePreset">
+              {
+                E_PRESETS.map((item) => (
+                  <option value={item.id} selected={item.id === 'atropine'}>
+                    {item.label}
+                    {item.e !== null ? ` (E = ${item.e})` : ''}
+                  </option>
+                ))
+              }
+            </select>
+          </div>
+          <Field
+            label="E value"
+            name="e"
+            value="0.16"
+            hint="Grams of NaCl equivalent to 1 g of solute."
+          />
+        </div>
+      </fieldset>
+
+      <div class="field-actions">
+        <button class="btn btn--primary" type="submit">Find NaCl equivalent</button>
+        <button class="btn btn--quiet" type="reset">Clear</button>
+      </div>
+      <div class="field-actions" style="margin-top:0.9rem">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"equivalent","mass":"0.5","ePreset":"atropine","e":"0.16"}'
+        >
+          Example: 0.5 g atropine sulfate
+        </button>
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-example='{"mode":"equivalent","mass":"2","ePreset":"boric-acid","e":"0.52"}'
+        >
+          Example: 2 g boric acid
+        </button>
+      </div>
+    </div>
+
+    <div data-mode-panel="recipe" hidden>
+      <fieldset>
+        <legend>Formula ingredients</legend>
+        <div class="rows-head" aria-hidden="true">
+          <span>Label (optional)</span>
+          <span>Mass (g)</span>
+          <span>E value</span>
+          <span></span>
+        </div>
+        <div class="rows" id="ingredients"></div>
+        <div class="field-actions">
+          <button class="btn btn--quiet btn--tiny" type="button" id="add-row">
+            + Add ingredient
+          </button>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Finished preparation</legend>
+        <div class="field-grid">
+          <Field
+            label="Final volume (mL)"
+            name="volume"
+            placeholder="100"
+            hint="The qs ad volume the prescription states."
+          />
+        </div>
+      </fieldset>
+
+      <div class="field-actions">
+        <button class="btn btn--primary" type="submit">Find NaCl to add</button>
+        <button class="btn btn--quiet" type="button" id="clear-recipe">Clear</button>
+      </div>
+
+      <div class="field-actions" style="margin-top:0.9rem">
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-recipe-example='{"volume":"100","rows":[["Atropine sulfate","0.5","0.16"]]}'
+        >
+          Example: atropine 0.5 g qs 100 mL
+        </button>
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-recipe-example='{"volume":"100","rows":[["Boric acid","1.5","0.52"]]}'
+        >
+          Example: boric acid 1.5 g qs 100 mL
+        </button>
+        <button
+          class="btn btn--quiet btn--tiny"
+          type="button"
+          data-recipe-example='{"volume":"100","rows":[["Boric acid","2","0.52"],["Phenylephrine HCl","0.1","0.32"]]}'
+        >
+          Example: boric + phenylephrine qs 100 mL
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div slot="concept">
+    <h2>E values and isotonicity</h2>
+    <p>
+      Ophthalmic and injectable preparations should match the tonicity of body
+      fluids closely enough not to sting or hemolyze. Instead of counting every
+      particle, pharmacy courses use <strong>sodium chloride equivalents</strong>.
+    </p>
+
+    <h3>The E value</h3>
+    <pre class="formula">E = grams of NaCl with the same osmotic effect as 1 g of solute
+
+NaCl equivalent = mass (g) × E</pre>
+    <p>
+      Tabulated E values assume a typical concentration. If your table quotes a
+      different figure, use that one.
+    </p>
+
+    <h3>The isotonic reference</h3>
+    <pre class="formula">0.9% w/v NaCl  =  0.9 g NaCl per 100 mL
+                 =  0.009 g NaCl per mL
+
+isotonic NaCl target = 0.9 × (volume / 100)</pre>
+
+    <h3>NaCl to add for a formula</h3>
+    <pre class="formula">NaCl to add = isotonic NaCl target − Σ (mass × E)</pre>
+    <p>
+      Include every dissolved solid that contributes to tonicity. Sodium
+      chloride already in the formula counts with E = 1.0. If the subtraction
+      comes out negative, the preparation is hypertonic and you do not add more
+      salt.
+    </p>
+
+    <h3>Common E values</h3>
+    <p>Quick reference for ingredients that show up often in coursework:</p>
+    <ul>
+      {
+        presetOptions.map((item) => (
+          <li>
+            {item.label}: E = {item.e}
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="callout">
+      <p>
+        <strong>Study aid, not a compounding order.</strong> E values vary by
+        reference and concentration. Use the table your lecturer provides when
+        it disagrees with this list.
+      </p>
+    </div>
+  </div>
+
+  <template id="row-template">
+    <div class="row-item" data-ing-row>
+      <input
+        type="text"
+        data-c="name"
+        placeholder="e.g. Boric acid"
+        aria-label="Ingredient label"
+        autocomplete="off"
+      />
+      <input
+        type="number"
+        step="any"
+        inputmode="decimal"
+        data-c="mass"
+        placeholder="1.5"
+        aria-label="Mass in grams"
+        autocomplete="off"
+      />
+      <input
+        type="number"
+        step="any"
+        inputmode="decimal"
+        data-c="e"
+        placeholder="0.52"
+        aria-label="E value"
+        autocomplete="off"
+      />
+      <button class="row-remove" type="button" data-remove aria-label="Remove ingredient"
+        >&times;</button
+      >
+    </div>
+  </template>
+</CalcPage>
+
+<script>
+  import { setupCalculator, setupModes } from '../../scripts/calc.js';
+  import { solveIsotonicity, E_PRESETS } from '../../scripts/solvers/isotonicity.js';
+
+  const presetMap = Object.fromEntries(E_PRESETS.map((item) => [item.id, item.e]));
+
+  const modeInput = document.querySelector('input[name="mode"]');
+  const listEl = document.getElementById('ingredients');
+  const template = document.getElementById('row-template');
+  const ePreset = document.getElementById('ePreset');
+  const eField = document.querySelector('input[name="e"]');
+
+  ePreset?.addEventListener('change', () => {
+    const value = presetMap[ePreset.value];
+    if (value !== null && value !== undefined && eField) {
+      eField.value = String(value);
+      eField.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  });
+
+  function addRow(values) {
+    const row = template.content.querySelector('.row-item').cloneNode(true);
+
+    if (values) {
+      const [name, mass, e] = values;
+      row.querySelector('[data-c="name"]').value = name;
+      row.querySelector('[data-c="mass"]').value = mass;
+      row.querySelector('[data-c="e"]').value = e;
+    }
+
+    row.querySelector('[data-remove]').addEventListener('click', () => {
+      row.remove();
+      if (!listEl.querySelector('[data-ing-row]')) addRow();
+      listEl.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+
+    listEl.append(row);
+    return row;
+  }
+
+  function readRows() {
+    return Array.from(listEl.querySelectorAll('[data-ing-row]'))
+      .map((row) => ({
+        name: row.querySelector('[data-c="name"]').value.trim(),
+        mass: row.querySelector('[data-c="mass"]').value.trim(),
+        e: row.querySelector('[data-c="e"]').value.trim(),
+      }))
+      .filter((row) => row.name || row.mass || row.e);
+  }
+
+  const calc = setupCalculator({
+    form: '#calc',
+    onPreset(preset) {
+      if (preset.mode) activate(preset.mode);
+      if (preset.ePreset && ePreset) {
+        ePreset.value = preset.ePreset;
+        ePreset.dispatchEvent(new Event('change'));
+      }
+    },
+    solve: (v) => {
+      if (v.mode === 'recipe') {
+        return solveIsotonicity({ ...v, rows: readRows() });
+      }
+      return solveIsotonicity(v);
+    },
+  });
+
+  const activate = setupModes((mode) => {
+    modeInput.value = mode;
+    calc.clear();
+  });
+
+  document.getElementById('add-row')?.addEventListener('click', () => addRow());
+
+  document.getElementById('clear-recipe')?.addEventListener('click', () => {
+    document.getElementById('calc').reset();
+    modeInput.value = 'recipe';
+    listEl.replaceChildren();
+    addRow();
+    activate('recipe');
+    calc.clear();
+  });
+
+  for (const button of document.querySelectorAll('[data-recipe-example]')) {
+    button.addEventListener('click', () => {
+      const preset = JSON.parse(button.dataset.recipeExample);
+      activate('recipe');
+      document.querySelector('input[name="volume"]').value = preset.volume;
+      listEl.replaceChildren();
+      preset.rows.forEach((row) => addRow(row));
+      calc.run();
+    });
+  }
+
+  addRow();
+</script>

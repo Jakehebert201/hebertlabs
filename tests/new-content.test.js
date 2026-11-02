@@ -3,7 +3,13 @@ import assert from 'node:assert/strict';
 
 import { CalcError } from '../src/scripts/core.js';
 import { solveBsa, REFERENCE_BSA } from '../src/scripts/solvers/bsa.js';
+<<<<<<< HEAD
+=======
+import { solveCreatinineClearance } from '../src/scripts/solvers/creatinine-clearance.js';
+import { solveMolarityOsmolarity } from '../src/scripts/solvers/molarity-osmolarity.js';
+>>>>>>> 4bad32a8cfa4eda00aab8f754813a0cb06857cfe
 import { solveAlligations } from '../src/scripts/solvers/alligations.js';
+import { solveIsotonicity } from '../src/scripts/solvers/isotonicity.js';
 
 /** Pull the first finite number out of an answer string like `1.8351 m²`. */
 function num(answer) {
@@ -133,6 +139,321 @@ describe('BSA and BSA-based dosing', () => {
   });
 });
 
+<<<<<<< HEAD
+=======
+describe('Creatinine clearance (Cockcroft-Gault)', () => {
+  it('uses ABW when it is lower than IBW', () => {
+    // 70 in male IBW = 50 + 2.3×10 = 73 kg; ABW 70 kg wins
+    const result = solveCreatinineClearance({
+      age: 70,
+      sex: 'male',
+      scr: 1.2,
+      weight: 70,
+      weightUnit: 'kg',
+      height: 70,
+      heightUnit: 'in',
+    });
+    // (140-70)×70 / (72×1.2) = 4900 / 86.4 ≈ 56.713
+    approx(num(result.answer), 56.713, 1e-2);
+    assert.match(result.answer, /mL\/min/);
+    assert.match(result.answerNote, /actual body weight/i);
+  });
+
+  it('uses IBW when it is lower than ABW', () => {
+    const result = solveCreatinineClearance({
+      age: 55,
+      sex: 'male',
+      scr: 1.1,
+      weight: 90,
+      weightUnit: 'kg',
+      height: 70,
+      heightUnit: 'in',
+    });
+    // IBW = 73; CrCl = (140-55)×73 / (72×1.1)
+    approx(num(result.answer), (85 * 73) / (72 * 1.1), 1e-2);
+    assert.match(result.answerNote, /ideal body weight/i);
+  });
+
+  it('applies the 0.85 female factor', () => {
+    // ABW 60 kg is below both male IBW (73) and female IBW (68.5) at 70 in
+    const male = solveCreatinineClearance({
+      age: 65,
+      sex: 'male',
+      scr: 1.0,
+      weight: 60,
+      weightUnit: 'kg',
+      height: 70,
+      heightUnit: 'in',
+    });
+    const female = solveCreatinineClearance({
+      age: 65,
+      sex: 'female',
+      scr: 1.0,
+      weight: 60,
+      weightUnit: 'kg',
+      height: 70,
+      heightUnit: 'in',
+    });
+    approx(num(female.answer), num(male.answer) * 0.85, 1e-3);
+  });
+
+  it('converts pounds before comparing weights', () => {
+    const result = solveCreatinineClearance({
+      age: 70,
+      sex: 'male',
+      scr: 1.2,
+      weight: 154,
+      weightUnit: 'lb',
+      height: 70,
+      heightUnit: 'in',
+    });
+    // 154 lb / 2.2 = 70 kg < IBW 73 kg
+    approx(num(result.answer), 56.713, 1e-2);
+    assert.match(result.steps[0].math, /2\.2/);
+  });
+
+  it('rejects missing serum creatinine', () => {
+    throwsCalc(
+      () =>
+        solveCreatinineClearance({
+          age: 70,
+          sex: 'male',
+          scr: null,
+          weight: 70,
+          weightUnit: 'kg',
+          height: 70,
+          heightUnit: 'in',
+        }),
+      /creatinine/i
+    );
+  });
+
+  it('requires height to compare IBW with ABW', () => {
+    throwsCalc(
+      () =>
+        solveCreatinineClearance({
+          age: 55,
+          sex: 'male',
+          scr: 1.1,
+          weight: 90,
+          weightUnit: 'kg',
+          height: null,
+          heightUnit: 'in',
+        }),
+      /height/i
+    );
+  });
+});
+
+describe('Isotonicity and E values', () => {
+  it('NaCl equivalent for a single solute', () => {
+    const result = solveIsotonicity({
+      mode: 'equivalent',
+      mass: 0.5,
+      e: 0.16,
+    });
+    approx(num(result.answer), 0.08, 1e-6);
+    assert.match(result.answer, /NaCl equivalent/);
+  });
+
+  it('finds NaCl to add for atropine qs 100 mL', () => {
+    const result = solveIsotonicity({
+      mode: 'recipe',
+      volume: 100,
+      rows: [{ name: 'Atropine sulfate', mass: '0.5', e: '0.16' }],
+    });
+    // 0.5×0.16 = 0.08; target 0.9; add 0.82
+    approx(num(result.answer), 0.82, 1e-3);
+    assert.match(result.answer, /g NaCl$/);
+  });
+
+  it('finds NaCl to add for boric acid 1.5 g qs 100 mL', () => {
+    const result = solveIsotonicity({
+      mode: 'recipe',
+      volume: 100,
+      rows: [{ name: 'Boric acid', mass: '1.5', e: '0.52' }],
+    });
+    // 1.5×0.52 = 0.78; target 0.9; add 0.12
+    approx(num(result.answer), 0.12, 1e-3);
+  });
+
+  it('flags a hypertonic formula', () => {
+    const result = solveIsotonicity({
+      mode: 'recipe',
+      volume: 100,
+      rows: [{ name: 'Boric acid', mass: '2', e: '0.52' }],
+    });
+    assert.match(result.answer, /hypertonic/i);
+    assert.match(result.answerNote, /Do not add/i);
+  });
+
+  it('sums multiple ingredients before subtracting', () => {
+    const result = solveIsotonicity({
+      mode: 'recipe',
+      volume: 100,
+      rows: [
+        { name: 'Boric acid', mass: '2', e: '0.52' },
+        { name: 'Phenylephrine HCl', mass: '0.1', e: '0.32' },
+      ],
+    });
+    // 1.04 + 0.032 = 1.072; target 0.9; hypertonic
+    assert.match(result.answer, /hypertonic/i);
+    approx(num(result.table.rows.at(-2)[3]), 0.9, 1e-3);
+  });
+
+  it('rejects a recipe with no ingredients', () => {
+    throwsCalc(
+      () =>
+        solveIsotonicity({
+          mode: 'recipe',
+          volume: 100,
+          rows: [],
+        }),
+      /at least one/i
+    );
+  });
+
+  it('rejects missing E value on an ingredient', () => {
+    throwsCalc(
+      () =>
+        solveIsotonicity({
+          mode: 'recipe',
+          volume: 100,
+          rows: [{ name: 'Boric acid', mass: '1.5', e: '' }],
+        }),
+      /E value/i
+    );
+  });
+});
+
+describe('Molarity, molality, osmolarity and osmolality', () => {
+  const naclMolar = { mode: 'molarity', mass: 9, mw: 58.44, volume: 1000 };
+  const naclOsmolar = { mode: 'osmolarity', mass: 9, mw: 58.44, volume: 1000, i: 2 };
+  const naclMolal = { mode: 'molality', mass: 0.9, mw: 58.44, solventMass: 100 };
+  const naclOsmolal = {
+    mode: 'osmolality',
+    mass: 0.9,
+    mw: 58.44,
+    solventMass: 100,
+    i: 2,
+  };
+
+  it('0.9% NaCl molarity is about 0.154 M', () => {
+    const result = solveMolarityOsmolarity(naclMolar);
+    approx(num(result.answer), 0.154, 1e-3);
+    assert.match(result.answer, /M$/);
+  });
+
+  it('0.9% NaCl osmolarity is about 308 mOsmol/L', () => {
+    const result = solveMolarityOsmolarity(naclOsmolar);
+    approx(num(result.answer), 308, 0.1);
+    assert.match(result.answer, /mOsmol\/L/);
+    assert.match(result.steps[0].math, /0\.154/);
+  });
+
+  it('5% dextrose monohydrate osmolarity is about 252 mOsmol/L', () => {
+    const result = solveMolarityOsmolarity({
+      mode: 'osmolarity',
+      mass: 50,
+      mw: 198.17,
+      volume: 1000,
+      i: 1,
+    });
+    approx(num(result.answer), 252.31, 0.1);
+  });
+
+  it('0.9 g NaCl in 100 g water is about 0.154 mol/kg', () => {
+    const result = solveMolarityOsmolarity(naclMolal);
+    approx(num(result.answer), 0.154, 1e-3);
+    assert.match(result.answer, /mol\/kg/);
+  });
+
+  it('same NaCl sample osmolality is about 308 mOsmol/kg', () => {
+    const result = solveMolarityOsmolarity(naclOsmolal);
+    approx(num(result.answer), 308, 0.1);
+    assert.match(result.answer, /mOsmol\/kg/);
+  });
+
+  it('converts M to mOsmol/L and back', () => {
+    const forward = solveMolarityOsmolarity({
+      mode: 'convert',
+      convertBasis: 'liter',
+      molarity: 0.154,
+      osmolarity: null,
+      molality: null,
+      osmolality: null,
+      i: 2,
+    });
+    approx(num(forward.answer), 308, 1e-6);
+
+    const back = solveMolarityOsmolarity({
+      mode: 'convert',
+      convertBasis: 'liter',
+      molarity: null,
+      osmolarity: num(forward.answer),
+      molality: null,
+      osmolality: null,
+      i: 2,
+    });
+    approx(num(back.answer), 0.154, 1e-6);
+  });
+
+  it('converts molality to mOsmol/kg and back', () => {
+    const forward = solveMolarityOsmolarity({
+      mode: 'convert',
+      convertBasis: 'kg',
+      molarity: null,
+      osmolarity: null,
+      molality: 0.154,
+      osmolality: null,
+      i: 2,
+    });
+    approx(num(forward.answer), 308, 1e-6);
+
+    const back = solveMolarityOsmolarity({
+      mode: 'convert',
+      convertBasis: 'kg',
+      molarity: null,
+      osmolarity: null,
+      molality: null,
+      osmolality: num(forward.answer),
+      i: 2,
+    });
+    approx(num(back.answer), 0.154, 1e-6);
+  });
+
+  it('rejects i below 1', () => {
+    throwsCalc(
+      () =>
+        solveMolarityOsmolarity({
+          mode: 'osmolarity',
+          mass: 9,
+          mw: 58.44,
+          volume: 1000,
+          i: 0.5,
+        }),
+      /Van't Hoff|below 1/i
+    );
+  });
+
+  it('rejects convert when both boxes are filled', () => {
+    throwsCalc(
+      () =>
+        solveMolarityOsmolarity({
+          mode: 'convert',
+          convertBasis: 'liter',
+          molarity: 0.154,
+          osmolarity: 308,
+          molality: null,
+          osmolality: null,
+          i: 2,
+        }),
+      /Both molarity and osmolarity/i
+    );
+  });
+});
+
+>>>>>>> 4bad32a8cfa4eda00aab8f754813a0cb06857cfe
 describe('Alligations', () => {
   it('alternate parts for 95% and 50% → 70%', () => {
     const result = solveAlligations({
