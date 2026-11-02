@@ -1,0 +1,129 @@
+---
+import CalcPage from '../../components/CalcPage.astro';
+import Field from '../../components/Field.astro';
+import { compounds, amountUnits } from '../../data/compounds.js';
+const initial = compounds[0];
+---
+
+<CalcPage
+  title="Moles, milliosmoles & milliequivalents"
+  kicker="Dosing"
+  lede="Start with a weight, moles, milliosmoles or milliequivalents and convert in either direction. Follow the units through molecular weight, particle count and ionic charge to see why each answer is different."
+  description="Convert grams, milligrams, moles, millimoles, milliosmoles and milliequivalents using compound molecular weight, dissociation and valency, with every step shown."
+>
+  <form slot="form" id="calc">
+    <fieldset>
+      <legend>The compound</legend>
+      <div class="field-grid">
+        <div class="field field--wide">
+          <label for="compoundPreset">Choose a compound</label>
+          <select id="compoundPreset" name="compoundPreset">
+            {compounds.map((compound) => <option value={compound.id}>{compound.name}</option>)}
+            <option value="custom">Custom compound — enter its properties below</option>
+          </select>
+          <span class="hint">Presets fill the properties below. Edit any value to match your problem.</span>
+        </div>
+        <Field label="Compound name or formula" name="compound" type="text" value={initial.name} wide />
+        <Field label="Molecular weight (g/mol)" name="mw" value={initial.mw} hint="Use the weight of the whole compound, including any water of crystallization." />
+        <Field label="Particle factor (i)" name="i" value={initial.i} hint="Particles per formula unit: NaCl = 2, CaCl₂ = 3, glucose = 1. This is different from valency." />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>The ion for milliequivalents</legend>
+      <div class="field-grid">
+        <Field label="Selected ion" name="ion" type="text" value={initial.ion} hint="For example, Ca2+ or Cl−. Count one ion species at a time." />
+        <Field label="Valency (absolute charge)" name="valence" value={initial.valence} step="1" hint="1 for Na+ or Cl−, 2 for Ca2+, 0 for a non-electrolyte." />
+        <Field label="Selected ions per formula unit" name="ionCount" value={initial.ionCount} step="1" hint="CaCl₂ contains 1 Ca2+ or 2 Cl−. Na₂SO₄ contains 2 Na+. Ignored when valency is 0." />
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>What you know and what you need</legend>
+      <div class="field-grid">
+        <Field label="Known amount" name="amount" placeholder="1" />
+        <div class="field">
+          <label for="from">Known unit</label>
+          <select id="from" name="from">
+            {amountUnits.map((unit) => <option value={unit.id}>{unit.label}</option>)}
+          </select>
+        </div>
+        <div class="field field--wide">
+          <label for="to">Solve for</label>
+          <select id="to" name="to">
+            {amountUnits.map((unit) => <option value={unit.id} selected={unit.id === 'mEq'}>{unit.label}</option>)}
+          </select>
+        </div>
+      </div>
+      <p class="hint">Enter a total amount, such as 20 mEq, rather than a concentration such as 20 mEq/L. Every solution also lists all the equivalent amounts.</p>
+    </fieldset>
+
+    <div class="field-actions">
+      <button class="btn btn--primary" type="submit">Convert and show steps</button>
+      <button class="btn btn--quiet" type="reset">Clear</button>
+    </div>
+    <div class="field-actions" style="margin-top:0.9rem">
+      <button class="btn btn--quiet btn--tiny" type="button" data-example='{"compoundPreset":"nacl","amount":"1","from":"g","to":"mEq"}'>Example: 1 g NaCl → mEq</button>
+      <button class="btn btn--quiet btn--tiny" type="button" data-example='{"compoundPreset":"kcl","amount":"20","from":"mEq","to":"mg"}'>Example: 20 mEq KCl → mg</button>
+      <button class="btn btn--quiet btn--tiny" type="button" data-example='{"compoundPreset":"cacl2-2h2o","amount":"3","from":"mOsm","to":"mEq"}'>Example: 3 mOsm CaCl₂·2H₂O → mEq</button>
+      <button class="btn btn--quiet btn--tiny" type="button" data-example='{"compoundPreset":"na2so4","amount":"1","from":"mmol","to":"mEq"}'>Example: 1 mmol Na₂SO₄ → mEq Na+</button>
+      <button class="btn btn--quiet btn--tiny" type="button" data-example='{"compoundPreset":"dextrose-h2o","amount":"5","from":"g","to":"mOsm"}'>Example: 5 g dextrose → mOsm</button>
+    </div>
+  </form>
+
+  <div slot="concept">
+    <h2>One amount, three ways to count</h2>
+    <p><strong>Moles</strong> count compound formula units. <strong>Osmoles</strong> count the particles those units produce in solution. <strong>Equivalents</strong> count charge carried by a specified ion.</p>
+    <pre class="formula">mol  =  grams ÷ MW
+mmol =  mol × 1000  =  milligrams ÷ MW
+mOsm =  mmol of compound × i
+mEq  =  mmol of compound × ion count × |z|</pre>
+    <p>To work backward, divide by the same factors. To recover mass, multiply moles by MW in g/mol, or millimoles by MW in mg/mmol.</p>
+
+    <h3>Particle count is different from valency</h3>
+    <p>CaCl₂ dissociates into one Ca2+ and two Cl−, so <strong>i = 3</strong>. Calcium has <strong>valency 2</strong>, and there is one calcium per formula unit.</p>
+    <pre class="formula">1 mmol CaCl₂ → 3 mOsm of particles
+1 mmol CaCl₂ → 2 mEq of Ca2+
+1 mmol CaCl₂ → 2 mEq of Cl−</pre>
+    <p>For chloride, ion count = 2 and valency = 1. Calculate either ion separately; do not add calcium and chloride mEq together. For Na₂SO₄, use ion count = 2 and valency = 1 when finding sodium mEq.</p>
+
+    <h3>Match the chemical form</h3>
+    <p>Anhydrous CaCl₂ has MW 110.98 g/mol; CaCl₂·2H₂O has MW 147.02 g/mol. The same mass therefore gives different mole amounts. Water of crystallization changes the molecular weight; it joins the solvent rather than adding to the solute particle factor.</p>
+    <div class="callout">
+      <p><strong>Non-electrolytes:</strong> glucose has i = 1 and no ionic charge. You can convert mass, mol, mmol and mOsm, but mEq does not apply.</p>
+    </div>
+
+    <h3>Amounts versus concentrations</h3>
+    <p>mOsm is a total amount; mOsm/L is osmolarity. Divide a total amount by liters of solution to obtain a per-liter concentration. Molality instead uses kilograms of solvent. For concentration and particle effects, see <a href="/calculators/colligative-properties/">colligative properties &amp; Van't Hoff</a>.</p>
+    <p class="hint">Definitions: <a href="https://www.merckmanuals.com/professional/resourcespages/conversion-tables">Merck conversion tables</a>. Hydrated calcium example: <a href="https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=7e94daf8-b71f-49d9-af3f-3a78ae9dfc8a">DailyMed calcium chloride label</a>. Presets use rounded classroom MW values and ideal complete dissociation.</p>
+  </div>
+</CalcPage>
+
+<script>
+  import { setupCalculator } from '../../scripts/calc.js';
+  import { compounds } from '../../data/compounds.js';
+  import { solveMolesOsmolesEquivalents } from '../../scripts/solvers/moles-osmoles-equivalents.js';
+
+  const form = document.querySelector<HTMLFormElement>('#calc');
+  const presetSelect = form.elements.namedItem('compoundPreset') as HTMLSelectElement;
+  const properties = ['compound', 'mw', 'i', 'ion', 'ionCount', 'valence'];
+
+  function applyCompound(id: string) {
+    const compound = compounds.find((item) => item.id === id);
+    for (const name of properties) {
+      const field = form.elements.namedItem(name) as HTMLInputElement;
+      field.value = compound ? String(name === 'compound' ? compound.name : compound[name]) : '';
+    }
+  }
+
+  // Register before the shared engine, so a change recalculates with fresh properties.
+  presetSelect.addEventListener('change', () => applyCompound(presetSelect.value));
+  for (const name of properties) {
+    form.elements.namedItem(name).addEventListener('input', () => { presetSelect.value = 'custom'; });
+  }
+  setupCalculator({
+    form: '#calc',
+    solve: solveMolesOsmolesEquivalents,
+    onPreset(preset) { applyCompound(preset.compoundPreset); },
+  });
+</script>

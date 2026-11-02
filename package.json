@@ -10,7 +10,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "node --test"
+    "test": "node --test",
+    "test:smoke": "node tests/smoke.mjs"
   },
   "dependencies": {
     "astro": "^7.2.10"

@@ -58,15 +58,15 @@ export const calculators = [
     desc: 'Mosteller body surface area from height and weight, with lb→kg and in→cm conversions, then mg/m² orders turned into patient doses against the 1.73 m² adult reference.',
   },
   {
+    href: '/calculators/moles-osmoles-equivalents/',
+    title: 'Moles, milliosmoles & milliequivalents',
+    tag: 'Dosing',
+    desc: 'Convert weight, mol, mmol, mOsm and mEq in either direction using molecular weight, particle count and ionic valency, with compound presets and every step shown.',
+  },
+  {
     href: '/calculators/colligative-properties/',
     title: "Colligative properties & Van't Hoff",
     tag: 'Physical pharmacy',
     desc: 'Osmolarity, freezing point depression, boiling point elevation and vapor pressure lowering, all driven by the number of particles in solution.',
-  },
-  {
-    href: '/calculators/molarity-osmolarity/',
-    title: 'Molarity, molality and osmoles',
-    tag: 'Physical pharmacy',
-    desc: 'Molarity and osmolarity per liter of solution, molality and osmolality per kg of solvent, plus conversions within each pair using the Van\'t Hoff factor.',
   },
 ];

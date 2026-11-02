@@ -13,6 +13,8 @@ npm install
 npm run dev      # local dev server, usually http://localhost:4321
 npm run build    # static build into dist/
 npm run preview  # serve the built output to check it before deploying
+npm test         # pure solver unit tests
+npm run test:smoke # HTTP smoke test against preview (default 127.0.0.1:4321)
 ```
 
 ## Project layout
@@ -82,6 +84,12 @@ sitemap while you work on it.
 The shared engine in `src/scripts/calc.js` handles reading the form, rendering
 the answer and steps, live-updating as the user types, error display, and the
 preset example buttons.
+
+The Dosing calculator at `/calculators/moles-osmoles-equivalents/` converts
+total amounts among g, mg, mol, mmol, mOsm and mEq. Compound presets live in
+`src/data/compounds.js`; custom values remain editable. Milliequivalents refer
+to the named ion and include its stoichiometric count and absolute valency.
+The former `/calculators/molarity-osmolarity/` URL redirects to this page.
 
 ## Deploying
 

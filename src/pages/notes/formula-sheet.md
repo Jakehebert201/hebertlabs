@@ -2,7 +2,7 @@
 layout: ../../layouts/NoteLayout.astro
 title: Formula sheet
 description: The core equations behind each calculator, with a one-line gloss for each. For revision, not for memorizing without understanding.
-date: 2026-09-08
+date: 2026-11-02
 topic: Reference
 ---
 
@@ -150,22 +150,6 @@ Mosteller needs centimeters and kilograms; convert first, then multiply an mg/m�
 
 ## Physical pharmacy
 
-### Molarity, molality and osmoles
-
-[Open the calculator](/calculators/molarity-osmolarity/)
-
-<pre class="formula">              per liter of solution     per kg of solvent
-molecules     molarity (M)              molality (m)
-particles     osmolarity (mOsmol/L)     osmolality (mOsmol/kg)
-
-molarity (M)   =  moles ÷ liters of solution
-molality (m)   =  moles ÷ kg of solvent
-
-osmolarity (mOsmol/L)   =  M × i × 1000
-osmolality (mOsmol/kg)  =  m × i × 1000</pre>
-
-Same two choices every time: count molecules or particles, and divide by solution volume or solvent mass.
-
 ### Colligative properties & Van't Hoff
 
 [Open the calculator](/calculators/colligative-properties/)
@@ -182,6 +166,73 @@ The Van't Hoff factor counts how many particles each formula unit produces once 
         ΔP  =  X(solute) × P°             vapor pressure drops</pre>
 
 All four properties track particle count; *m* is molality (mol per kg of solvent), not molarity.
+
+## Exam 3
+
+### Moles and mass
+
+[Open the calculator](/calculators/moles-osmoles-equivalents/)
+
+<pre class="formula">1 mol  =  1000 mmol
+
+mol   =  grams ÷ MW
+grams =  mol × MW
+
+mmol       =  milligrams ÷ MW
+milligrams =  mmol × MW</pre>
+
+Moles count compound formula units. Molecular weight (MW) in g/mol has the same numerical value in mg/mmol. Use the MW of the whole compound, including any water of crystallization: anhydrous CaCl₂ and CaCl₂·2H₂O have different molecular weights.
+
+### Osmoles and milliosmoles
+
+<pre class="formula">1 Osm  =  1000 mOsm
+
+Osm  =  mol × i
+mol  =  Osm ÷ i
+
+mOsm =  mmol × i
+mmol =  mOsm ÷ i
+
+mOsm =  (grams ÷ MW) × i × 1000
+mOsm =  (milligrams ÷ MW) × i</pre>
+
+Osmoles count dissolved particles. The particle factor *i* is 1 for glucose, 2 for NaCl and 3 for CaCl₂ under ideal complete dissociation. Water of crystallization changes MW but joins the solvent rather than adding solute particles to *i*.
+
+### Equivalents and milliequivalents
+
+<pre class="formula">1 Eq  =  1000 mEq
+
+Eq  =  mol of selected ion × |z|
+mEq =  mmol of selected ion × |z|
+
+mEq =  mmol of compound × n × |z|
+mmol of compound = mEq ÷ (n × |z|)
+
+mEq =  (milligrams of compound ÷ MW) × n × |z|
+milligrams of compound = mEq × MW ÷ (n × |z|)</pre>
+
+Valency |z| is the absolute charge of the selected ion; *n* is the number of that ion per compound formula unit. For CaCl₂, calcium uses n = 1 and |z| = 2; chloride uses n = 2 and |z| = 1. For Na₂SO₄, sodium uses n = 2 and |z| = 1. Calculate one ion species at a time; do not add cation and anion mEq together. Non-electrolytes have no mEq conversion.
+
+### Converting particles to charge and back
+
+<pre class="formula">mEq  =  (mOsm ÷ i) × n × |z|
+mOsm =  (mEq ÷ (n × |z|)) × i
+
+mol  =  mOsm ÷ (1000 × i)
+mol  =  mEq ÷ (1000 × n × |z|)</pre>
+
+Recover the amount of compound first, then apply the factor for the unit you want. Particle count and valency are different: 1 mmol CaCl₂ gives 3 mOsm of particles but 2 mEq of calcium (or separately 2 mEq of chloride).
+
+### Total amounts versus concentrations
+
+<pre class="formula">molarity (mol/L)    =  mol ÷ liters of solution
+osmolarity (mOsm/L) =  mOsm ÷ liters of solution
+mEq/L              =  mEq ÷ liters of solution
+
+molality (mol/kg)    =  mol ÷ kg of solvent
+osmolality (mOsm/kg) =  mOsm ÷ kg of solvent</pre>
+
+mol, Osm, mOsm and mEq are total amounts. A per-liter or per-kilogram unit is a concentration; multiply by the matching solution volume or solvent mass to recover the total amount.
 
 ## Constants worth keeping nearby
 
