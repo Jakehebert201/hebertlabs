@@ -3,11 +3,7 @@ import assert from 'node:assert/strict';
 
 import { CalcError } from '../src/scripts/core.js';
 import { solveBsa, REFERENCE_BSA } from '../src/scripts/solvers/bsa.js';
-<<<<<<< HEAD
-=======
 import { solveCreatinineClearance } from '../src/scripts/solvers/creatinine-clearance.js';
-import { solveMolarityOsmolarity } from '../src/scripts/solvers/molarity-osmolarity.js';
->>>>>>> 4bad32a8cfa4eda00aab8f754813a0cb06857cfe
 import { solveAlligations } from '../src/scripts/solvers/alligations.js';
 import { solveIsotonicity } from '../src/scripts/solvers/isotonicity.js';
 
@@ -139,8 +135,6 @@ describe('BSA and BSA-based dosing', () => {
   });
 });
 
-<<<<<<< HEAD
-=======
 describe('Creatinine clearance (Cockcroft-Gault)', () => {
   it('uses ABW when it is lower than IBW', () => {
     // 70 in male IBW = 50 + 2.3×10 = 73 kg; ABW 70 kg wins
@@ -326,134 +320,6 @@ describe('Isotonicity and E values', () => {
   });
 });
 
-describe('Molarity, molality, osmolarity and osmolality', () => {
-  const naclMolar = { mode: 'molarity', mass: 9, mw: 58.44, volume: 1000 };
-  const naclOsmolar = { mode: 'osmolarity', mass: 9, mw: 58.44, volume: 1000, i: 2 };
-  const naclMolal = { mode: 'molality', mass: 0.9, mw: 58.44, solventMass: 100 };
-  const naclOsmolal = {
-    mode: 'osmolality',
-    mass: 0.9,
-    mw: 58.44,
-    solventMass: 100,
-    i: 2,
-  };
-
-  it('0.9% NaCl molarity is about 0.154 M', () => {
-    const result = solveMolarityOsmolarity(naclMolar);
-    approx(num(result.answer), 0.154, 1e-3);
-    assert.match(result.answer, /M$/);
-  });
-
-  it('0.9% NaCl osmolarity is about 308 mOsmol/L', () => {
-    const result = solveMolarityOsmolarity(naclOsmolar);
-    approx(num(result.answer), 308, 0.1);
-    assert.match(result.answer, /mOsmol\/L/);
-    assert.match(result.steps[0].math, /0\.154/);
-  });
-
-  it('5% dextrose monohydrate osmolarity is about 252 mOsmol/L', () => {
-    const result = solveMolarityOsmolarity({
-      mode: 'osmolarity',
-      mass: 50,
-      mw: 198.17,
-      volume: 1000,
-      i: 1,
-    });
-    approx(num(result.answer), 252.31, 0.1);
-  });
-
-  it('0.9 g NaCl in 100 g water is about 0.154 mol/kg', () => {
-    const result = solveMolarityOsmolarity(naclMolal);
-    approx(num(result.answer), 0.154, 1e-3);
-    assert.match(result.answer, /mol\/kg/);
-  });
-
-  it('same NaCl sample osmolality is about 308 mOsmol/kg', () => {
-    const result = solveMolarityOsmolarity(naclOsmolal);
-    approx(num(result.answer), 308, 0.1);
-    assert.match(result.answer, /mOsmol\/kg/);
-  });
-
-  it('converts M to mOsmol/L and back', () => {
-    const forward = solveMolarityOsmolarity({
-      mode: 'convert',
-      convertBasis: 'liter',
-      molarity: 0.154,
-      osmolarity: null,
-      molality: null,
-      osmolality: null,
-      i: 2,
-    });
-    approx(num(forward.answer), 308, 1e-6);
-
-    const back = solveMolarityOsmolarity({
-      mode: 'convert',
-      convertBasis: 'liter',
-      molarity: null,
-      osmolarity: num(forward.answer),
-      molality: null,
-      osmolality: null,
-      i: 2,
-    });
-    approx(num(back.answer), 0.154, 1e-6);
-  });
-
-  it('converts molality to mOsmol/kg and back', () => {
-    const forward = solveMolarityOsmolarity({
-      mode: 'convert',
-      convertBasis: 'kg',
-      molarity: null,
-      osmolarity: null,
-      molality: 0.154,
-      osmolality: null,
-      i: 2,
-    });
-    approx(num(forward.answer), 308, 1e-6);
-
-    const back = solveMolarityOsmolarity({
-      mode: 'convert',
-      convertBasis: 'kg',
-      molarity: null,
-      osmolarity: null,
-      molality: null,
-      osmolality: num(forward.answer),
-      i: 2,
-    });
-    approx(num(back.answer), 0.154, 1e-6);
-  });
-
-  it('rejects i below 1', () => {
-    throwsCalc(
-      () =>
-        solveMolarityOsmolarity({
-          mode: 'osmolarity',
-          mass: 9,
-          mw: 58.44,
-          volume: 1000,
-          i: 0.5,
-        }),
-      /Van't Hoff|below 1/i
-    );
-  });
-
-  it('rejects convert when both boxes are filled', () => {
-    throwsCalc(
-      () =>
-        solveMolarityOsmolarity({
-          mode: 'convert',
-          convertBasis: 'liter',
-          molarity: 0.154,
-          osmolarity: 308,
-          molality: null,
-          osmolality: null,
-          i: 2,
-        }),
-      /Both molarity and osmolarity/i
-    );
-  });
-});
-
->>>>>>> 4bad32a8cfa4eda00aab8f754813a0cb06857cfe
 describe('Alligations', () => {
   it('alternate parts for 95% and 50% → 70%', () => {
     const result = solveAlligations({

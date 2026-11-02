@@ -178,9 +178,6 @@ Mosteller needs centimeters and kilograms; convert first, then multiply an mg/mÂ
 
 ### Creatinine clearance
 
-<<<<<<< HEAD
-### Colligative properties & Van't Hoff
-=======
 [Open the calculator](/calculators/creatinine-clearance/)
 
 ```
@@ -198,7 +195,6 @@ dosing weight = min(ABW, IBW)
 Cockcroft-Gault estimates clearance for renal dosing tables. This course uses the lower of actual body weight and Devine ideal body weight.
 
 ### Isotonicity and E values
->>>>>>> 4bad32a8cfa4eda00aab8f754813a0cb06857cfe
 
 [Open the calculator](/calculators/isotonicity/)
 
